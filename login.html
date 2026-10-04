@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>Sign In — EarthNsol</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{min-height:100vh;display:flex;flex-direction:column;background:var(--cream)}
+.login-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 16px}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .logo-name{font-family:'Playfair Display',serif;font-size:2rem;color:var(--ink);letter-spacing:-0.02em}
+.login-logo .logo-tagline{font-size:0.82rem;color:var(--green);font-weight:500;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em}
+.login-card{background:white;border-radius:20px;padding:40px 36px;width:100%;max-width:440px;border:1px solid var(--border);box-shadow:var(--shadow-md)}
+.login-card h2{font-family:'Playfair Display',serif;font-size:1.6rem;text-align:center;color:var(--ink);margin-bottom:8px}
+.subtitle{font-size:0.85rem;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.5}
+
+/* Tab switcher */
+.auth-tabs{display:flex;background:var(--cream);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px}
+.auth-tab{flex:1;padding:10px;border:none;border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted)}
+.auth-tab.active{background:white;color:var(--green);box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:0.8rem;font-weight:600;color:var(--ink-mid);margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;box-sizing:border-box;border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s,box-shadow .2s}
+.field input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(58,125,68,0.1);background:white}
+.field-options{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.field-options label{font-size:0.8rem;font-weight:600;color:var(--ink-mid)}
+.forgot-link{font-size:0.78rem;color:var(--green);font-weight:500;cursor:pointer;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;padding:0}
+.remember-row{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.remember-row input[type=checkbox]{accent-color:var(--green);width:15px;height:15px}
+.remember-row label{font-size:0.84rem;color:var(--ink-mid);cursor:pointer}
+.switch-mode{text-align:center;font-size:0.85rem;color:var(--muted);margin-top:20px}
+.switch-mode a{color:var(--green);font-weight:600;cursor:pointer}
+.error-msg{background:#fef0f0;border:1px solid #f5c6c6;border-radius:8px;padding:10px 14px;font-size:0.83rem;color:#c0392b;margin-bottom:16px;display:none}
+.success-msg{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:10px 14px;font-size:0.83rem;color:var(--green);margin-bottom:16px;display:none}
+.btn-spin{display:none;width:16px;height:16px;border:2px solid rgba(255,255,255,0.4);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;margin-left:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:480px){.login-card{padding:28px 18px;margin:0 8px}}
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<div class="login-page">
+  <div class="login-logo anim">
+    <div class="logo-name">EarthNsol</div>
+    <div class="logo-tagline">Healing Soil, Nourishing Life</div>
+  </div>
+
+  <div class="login-card anim-2">
+
+    <!-- ══ SCREEN 1: Sign In / Sign Up ══ -->
+    <div id="main-form">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">Sign In</button>
+        <button class="auth-tab"        id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <div class="error-msg"   id="main-error"></div>
+      <div class="success-msg" id="main-success"></div>
+
+      <!-- Sign In fields -->
+      <div id="signin-fields">
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="si-email" placeholder="you@example.com" onkeypress="if(event.key==='Enter')doSignIn()">
+        </div>
+        <div class="field">
+          <div class="field-options">
+            <label>Password</label>
+            <button class="forgot-link" onclick="showScreen('forgot')">Forgot password?</button>
+          </div>
+          <input type="password" id="si-pass" placeholder="••••••••" onkeypress="if(event.key==='Enter')doSignIn()">
+        </div>
+        <div class="remember-row">
+          <input type="checkbox" id="remember-me">
+          <label for="remember-me">Remember me</label>
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" id="signin-btn" onclick="doSignIn()">
+          <span id="signin-text">Sign In</span>
+          <div class="btn-spin" id="signin-spin"></div>
+        </button>
+        <div class="switch-mode">Don't have an account? <a onclick="switchTab('signup')">Sign up</a></div>
+      </div>
+
+      <!-- Create Account fields -->
+      <div id="signup-fields" style="display:none">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="su-name" placeholder="Your full name">
+        </div>
+        <div class="field">
+          <label>Email Address</label>
+          <input type="email" id="su-email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="su-pass" placeholder="Min 6 characters">
+        </div>
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" id="su-pass2" placeholder="Repeat password" onkeypress="if(event.key==='Enter')doSignUp()">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" id="signup-btn" onclick="doSignUp()" style="margin-top:4px">
+          <span id="signup-text">Create Account</span>
+          <div class="btn-spin" id="signup-spin"></div>
+        </button>
+        <div class="switch-mode">Already have an account? <a onclick="switchTab('signin')">Sign in</a></div>
+      </div>
+    </div>
+
+    <!-- ══ SCREEN 2: Forgot Password ══ -->
+    <div id="forgot-form" style="display:none">
+      <h2>Reset Password</h2>
+      <p class="subtitle">Enter your email and we'll send a reset link via <strong>EarthNsol Gmail</strong>.</p>
+      <div class="error-msg"   id="forgot-error"></div>
+      <div class="success-msg" id="forgot-success"></div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="fp-email" placeholder="you@example.com" onkeypress="if(event.key==='Enter')doForgot()">
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" id="forgot-btn" onclick="doForgot()">
+        <span id="forgot-text">Send Reset Link</span>
+        <div class="btn-spin" id="forgot-spin"></div>
+      </button>
+      <div class="switch-mode"><a onclick="showScreen('main')">← Back to Sign In</a></div>
+    </div>
+
+    <!-- ══ SCREEN 3: Verify OTP ══ -->
+    <div id="otp-form" style="display:none">
+      <h2>Verify Email</h2>
+      <p class="subtitle">Enter the 8-digit code sent to <strong id="otp-email-display">your email</strong>.</p>
+      <div class="error-msg"   id="otp-error"></div>
+      <div class="success-msg" id="otp-success"></div>
+      <div class="field">
+        <label>Verification Code</label>
+        <input type="text" id="otp-code" placeholder="12345678" maxlength="8" style="text-align:center;font-size:1.4rem;letter-spacing:0.3em;font-weight:700" onkeypress="if(event.key==='Enter')doVerifyOtp()">
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" id="otp-btn" onclick="doVerifyOtp()">
+        <span id="otp-text">Verify Account</span>
+        <div class="btn-spin" id="otp-spin"></div>
+      </button>
+      <div class="switch-mode"><a onclick="showScreen('main')">← Back to Sign In</a></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ✅ Correct order: supabase → config → supabaseClient → inline script -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+let currentSignupEmail = '';
+
+// ── Redirect if already logged in ─────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  window.getSession().then(function (user) {
+    if (user) window.location.href = 'index.html';
+  });
+});
+
+// ── Screen control ────────────────────────────────────
+function showScreen(name) {
+  document.getElementById('main-form').style.display   = name === 'main'   ? 'block' : 'none';
+  document.getElementById('forgot-form').style.display = name === 'forgot' ? 'block' : 'none';
+  const otpForm = document.getElementById('otp-form');
+  if (otpForm) otpForm.style.display = name === 'otp' ? 'block' : 'none';
+}
+
+// ── Tab switcher ──────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  document.getElementById('signin-fields').style.display = tab === 'signin' ? 'block' : 'none';
+  document.getElementById('signup-fields').style.display = tab === 'signup' ? 'block' : 'none';
+  hideMsg('main-error'); hideMsg('main-success');
+}
+
+// ── Messages ──────────────────────────────────────────
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent       = msg;
+  el.style.display     = 'block';
+  el.style.background  = type === 'success' ? '#e8f5e9' : '#fef0f0';
+  el.style.borderColor = type === 'success' ? '#a5d6a7' : '#f5c6c6';
+  el.style.color       = type === 'success' ? 'var(--green)' : '#c0392b';
+}
+function hideMsg(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+// ── Loading ───────────────────────────────────────────
+function setLoading(btnId, spinId, textId, loading, label) {
+  document.getElementById(btnId).disabled               = loading;
+  document.getElementById(spinId).style.display         = loading ? 'inline-block' : 'none';
+  document.getElementById(textId).textContent           = loading ? 'Please wait...' : label;
+}
+
+// ── SIGN IN ───────────────────────────────────────────
+async function doSignIn() {
+  hideMsg('main-error'); hideMsg('main-success');
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  if (!email || !pass) { showMsg('main-error', 'Please enter email and password.'); return; }
+
+  setLoading('signin-btn', 'signin-spin', 'signin-text', true, 'Sign In');
+  try {
+    const res = await window.apiFetch('/api/auth/login', { 
+      method: 'POST', body: JSON.stringify({ email, password: pass }) 
+    });
+    localStorage.setItem('es-session-token', res.data.session.access_token);
+    localStorage.setItem('es-refresh-token', res.data.session.refresh_token);
+    
+    // Check if redirecting back to admin portal is requested via URL param
+    const params = new URLSearchParams(window.location.search);
+    const isFromAdmin = params.get('redirect') === 'admin';
+
+    let isAdmin = false;
+    if (isFromAdmin) {
+      try {
+        const checkRes = await window.apiFetch('/api/admin/check').catch(() => null);
+        if (checkRes && checkRes.isAdmin) {
+          isAdmin = true;
+        }
+      } catch (e) {}
+    }
+
+    if (isFromAdmin && isAdmin) {
+      showMsg('main-success', '✅ Welcome Admin! Redirecting to Portal...', 'success');
+      setTimeout(() => window.location.href = 'earthnsol-admin-portal-9067.html', 1000);
+    } else {
+      showMsg('main-success', '✅ Signed in! Redirecting...', 'success');
+      setTimeout(() => window.location.href = 'index.html', 1000);
+    }
+  } catch (err) {
+    showMsg('main-error', err.message);
+  } finally {
+    setLoading('signin-btn', 'signin-spin', 'signin-text', false, 'Sign In');
+  }
+}
+
+// ── SIGN UP ───────────────────────────────────────────
+async function doSignUp() {
+  hideMsg('main-error'); hideMsg('main-success');
+  const name  = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass  = document.getElementById('su-pass').value;
+  const pass2 = document.getElementById('su-pass2').value;
+
+  if (!name || !email || !pass) { showMsg('main-error', 'Please fill all fields.'); return; }
+  if (pass.length < 6)          { showMsg('main-error', 'Password must be at least 6 characters.'); return; }
+  if (pass !== pass2)           { showMsg('main-error', 'Passwords do not match.'); return; }
+
+  setLoading('signup-btn', 'signup-spin', 'signup-text', true, 'Create Account');
+  try {
+    const res = await window.apiFetch('/api/auth/register', { 
+      method: 'POST', body: JSON.stringify({ email, password: pass, full_name: name }) 
+    });
+    
+    // Check if email confirmation is required (Supabase behavior is session == null if OTP is sent)
+    if (res.data.user && !res.data.session) {
+      currentSignupEmail = email;
+      document.getElementById('otp-email-display').textContent = email;
+      showScreen('otp');
+      showMsg('otp-success', '✅ Check your email for the 8-digit code!', 'success');
+    } else {
+      showMsg('main-success', '✅ Account created! Redirecting...', 'success');
+      setTimeout(() => window.location.href = 'index.html', 1200);
+    }
+  } catch (err) {
+    showMsg('main-error', err.message);
+  } finally {
+    setLoading('signup-btn', 'signup-spin', 'signup-text', false, 'Create Account');
+  }
+}
+
+// ── FORGOT PASSWORD ───────────────────────────────────
+async function doForgot() {
+  hideMsg('forgot-error'); hideMsg('forgot-success');
+  const email = document.getElementById('fp-email').value.trim();
+  if (!email) { showMsg('forgot-error', 'Please enter your email.'); return; }
+
+  setLoading('forgot-btn', 'forgot-spin', 'forgot-text', true, 'Send Reset Link');
+  try {
+    await window.apiFetch('/api/auth/reset-password', { 
+      method: 'POST', body: JSON.stringify({ email }) 
+    });
+    showMsg('forgot-success', '✅ Reset link sent to your email!', 'success');
+  } catch (err) {
+    showMsg('forgot-error', err.message);
+  } finally {
+    setLoading('forgot-btn', 'forgot-spin', 'forgot-text', false, 'Send Reset Link');
+  }
+}
+
+// ── VERIFY OTP ─────────────────────────────────────────
+async function doVerifyOtp() {
+  hideMsg('otp-error'); hideMsg('otp-success');
+  const token = document.getElementById('otp-code').value.trim();
+  if (!token || token.length < 8) { showMsg('otp-error', 'Please enter the 8-digit verification code.'); return; }
+
+  setLoading('otp-btn', 'otp-spin', 'otp-text', true, 'Verify Account');
+  try {
+    const res = await window.apiFetch('/api/auth/verify-otp', { 
+      method: 'POST', body: JSON.stringify({ email: currentSignupEmail, token, type: 'signup' }) 
+    });
+    if (res.data.session) {
+      localStorage.setItem('es-session-token', res.data.session.access_token);
+      localStorage.setItem('es-refresh-token', res.data.session.refresh_token);
+    }
+    showMsg('otp-success', '✅ Verified successfully! Logging you in...', 'success');
+    setTimeout(() => window.location.href = 'index.html', 1000);
+  } catch (err) {
+    showMsg('otp-error', err.message);
+  } finally {
+    setLoading('otp-btn', 'otp-spin', 'otp-text', false, 'Verify Account');
+  }
+}
+
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>

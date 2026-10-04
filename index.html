@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<script src="theme.js"></script>
+<style>
+.hero{min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#1A3320 0%,#234B2D 40%,#2E633C 80%,#3A7D4B 100%)}
+.hero-bg-img{position:absolute;right:0;top:-10%;width:60%;height:120%;background:url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1000&q=85') center/cover;opacity:0.25;clip-path:polygon(15% 0%,100% 0%,100% 100%,0% 100%); filter: saturate(1.2)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(26,51,32,0.95) 35%,rgba(26,51,32,0.6) 65%,rgba(26,51,32,0.1) 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(16,185,129,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,0.06) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:700px; padding-top: 40px;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:8px 20px;margin-bottom:28px;font-size:0.75rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#A7F3D0; box-shadow: 0 4px 12px rgba(0,0,0,0.1)}
+.hero-eyebrow .dot{width:8px;height:8px;border-radius:50%;background:#34D399;animation:blink 2s ease infinite;flex-shrink:0; box-shadow: 0 0 10px #34D399;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero h1{font-family:var(--font-display);font-size:clamp(3.5rem,7vw,5.5rem);color:white;margin-bottom:24px;line-height:1.05;font-weight:800;letter-spacing:-0.03em;animation:fadeUp .8s .1s cubic-bezier(0.16,1,0.3,1) both}
+.hero h1 em{color:#A7F3D0;font-style:normal; background: linear-gradient(90deg, #A7F3D0, #34D399); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;}
+.hero-desc{font-size:1.15rem;color:rgba(255,255,255,0.85);margin-bottom:42px;line-height:1.7;max-width:540px;font-weight:500;animation:fadeUp .8s .2s cubic-bezier(0.16,1,0.3,1) both}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .8s .3s cubic-bezier(0.16,1,0.3,1) both}
+.hero-stats{display:flex;gap:40px;margin-top:64px;padding-top:36px;border-top:1px solid rgba(255,255,255,0.15);animation:fadeUp .8s .4s cubic-bezier(0.16,1,0.3,1) both}
+.hero-stat-num{font-family:var(--font-display);font-size:2.4rem;font-weight:800;color:white;line-height:1}
+.hero-stat-label{font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:3px;font-weight:500}
+.features-bar{background:var(--bg-card);border-bottom:1px solid var(--border)}
+.features-row{display:flex;justify-content:center}
+.feat-item{display:flex;align-items:center;gap:10px;padding:18px 28px;border-right:1px solid var(--border);font-size:0.82rem;font-weight:500;color:var(--ink-mid);transition:background .2s}
+.feat-item:last-child{border-right:none}
+.feat-item:hover{background:var(--green-pale)}
+.feat-icon{width:34px;height:34px;border-radius:9px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.featured-sec{padding:96px 0}
+.view-all-wrap{text-align:center;margin-top:48px}
+.why-sec{background:var(--bg-alt);padding:96px 0}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.why-card{background:var(--bg-card);border-radius:var(--r-lg);padding:32px 22px;text-align:center;border:1px solid var(--border);transition:transform .3s,box-shadow .3s,border-color .3s;position:relative;overflow:hidden}
+.why-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--green-lite));transform:scaleX(0);transition:transform .3s}
+.why-card:hover{transform:translateY(-7px);box-shadow:var(--shadow-md);border-color:var(--green-pale)}
+.why-card:hover::before{transform:scaleX(1)}
+.why-icon{width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--green),var(--green-mid));display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 18px;box-shadow:0 8px 20px var(--green-glow)}
+.why-card h3{font-family:'DM Sans',sans-serif;font-size:0.94rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.why-card p{font-size:0.8rem;color:var(--muted);line-height:1.65}
+.testimonials-sec{padding:96px 0}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.testimonial-card{background:var(--bg-card);border-radius:var(--r-lg);padding:28px;border:1px solid var(--border);transition:transform .25s,box-shadow .25s;position:relative}
+.testimonial-card::before{content:'"';font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:1;color:var(--green-pale);position:absolute;top:14px;right:20px;font-weight:700}
+.testimonial-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
+.stars{color:#e8a020;font-size:0.85rem;letter-spacing:2px;margin-bottom:14px}
+.testimonial-card p{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--ink);line-height:1.75;margin-bottom:20px;font-style:italic}
+.reviewer{display:flex;align-items:center;gap:10px}
+.reviewer-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green-lite),var(--green));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.9rem;flex-shrink:0}
+.reviewer h5{font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.reviewer span{font-size:0.73rem;color:var(--green);font-weight:500}
+.cta-sec{background:linear-gradient(135deg,#1A3320 0%,#234B2D 40%,#2E633C 100%);padding:100px 0;text-align:center;position:relative;overflow:hidden}
+.cta-sec::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(16,185,129,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,0.08) 1px,transparent 1px);background-size:64px 64px}
+.cta-sec>*{position:relative;z-index:1}
+.cta-sec h2{font-family:var(--font-display);font-size:clamp(2.4rem,4vw,3.2rem);color:white;margin-bottom:16px; font-weight:800; letter-spacing:-0.02em;}
+.cta-sec p{color:rgba(255,255,255,0.85);margin-bottom:40px;font-size:1.1rem; font-weight:500}
+@media(max-width:768px){.why-grid{grid-template-columns:repeat(2,1fr)}.testimonials-grid{grid-template-columns:1fr}.features-row{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.feat-item{flex-shrink:0}.hero-stats{gap:24px}}
+@media(max-width:480px){.why-grid{grid-template-columns:1fr}.hero-stats{flex-wrap:wrap;gap:20px}}
+</style>
+<title>EarthNsol – Premium Natural &amp; Organic Farming Products | Vermicompost India</title>
+<meta name="description" content="EarthNsol offers certified natural farming products including vermicompost, bio-fertilizers &amp; organic inputs. Boost crop yield 30-40% naturally. Trusted by 10,000+ farmers across India."/>
+<meta name="keywords" content="vermicompost online India, organic fertilizer, natural farming products, bio-fertilizer, vermiwash, activated charcoal for plants, organic soil conditioner, chemical-free farming, sustainable agriculture India, earthnsol"/>
+<link rel="canonical" href="https://earthnsol.in/"/>
+<meta property="og:title" content="EarthNsol – Premium Natural &amp; Organic Farming Products | Vermicompost India"/>
+<meta property="og:description" content="EarthNsol offers certified natural farming products including vermicompost, bio-fertilizers &amp; organic inputs. Boost crop yield 30-40% naturally. Trusted by 10,000+ farmers across India."/>
+<meta property="og:image" content="https://earthnsol.in/logo.jpg"/>
+<meta property="og:url" content="https://earthnsol.in/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="EarthNsol"/>
+<meta property="og:locale" content="en_IN"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="EarthNsol – Premium Natural &amp; Organic Farming Products | Vermicompost India"/>
+<meta name="twitter:description" content="EarthNsol offers certified natural farming products including vermicompost, bio-fertilizers &amp; organic inputs. Boost crop yield 30-40% naturally. Trusted by 10,000+ farmers across India."/>
+<meta name="twitter:image" content="https://earthnsol.in/logo.jpg"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","@id":"https://earthnsol.in/#organization","name":"EarthNsol","url":"https://earthnsol.in/","logo":"https://earthnsol.in/logo.jpg","description":"Natural and organic farming products company.","sameAs":["https://www.facebook.com/share/1EJi8jieNZ/","https://instagram.com/earthNsol","https://www.youtube.com/@earthnsol"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LocalBusiness","@id":"https://earthnsol.in/#localbusiness","name":"EarthNsol","url":"https://earthnsol.in/","image":"https://earthnsol.in/logo.jpg","address":{"@type":"PostalAddress","addressCountry":"IN"},"priceRange":"₹₹"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","@id":"https://earthnsol.in/#website","url":"https://earthnsol.in/","name":"EarthNsol","potentialAction":{"@type":"SearchAction","target":"https://earthnsol.in/shop.html?search={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://earthnsol.in/"}]}</script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" class="es-logo-img" alt="EarthNsol">
+        <div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')">☰</button>
+      <nav id="main-nav"><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <span class="welcome-text" id="welcome-text">Welcome, Guest</span>
+        <button class="nav-btn nav-btn-cart" onclick="window.location.href='cart.html'" title="Cart">🛒 <span class="nav-btn-text">Cart</span> <span class="cart-badge" id="cart-count" style="display:flex">0</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<style>
+@media(max-width:900px){ .hero-split { grid-template-columns: 1fr !important; gap: 40px !important; text-align:center !important; padding:40px 0 !important; } .hero-split .hero-btns { justify-content:center; } .hero-split .hero-stats { justify-content:center !important; } .hero-split .hero-content { margin:0 auto; padding-top:40px !important;} }
+.deals-slider-container {
+  position: relative;
+  width: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(46, 204, 113, 0.22);
+  border: 4px solid #2ecc71;
+  aspect-ratio: 1/1;
+  max-height: 520px;
+  background: var(--surface);
+}
+.hot-deals-badge {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: linear-gradient(135deg, #FF6B6B, #E83A3A);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(232, 58, 58, 0.4);
+  text-transform: uppercase;
+}
+.pulse-dot {
+  width: 8px; height: 8px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.deal-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+.deal-slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+.deal-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.deal-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(2,44,34, 0.9));
+  padding: 40px 24px 24px;
+  color: white;
+  text-align: center;
+}
+.deal-caption h3 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.slider-dots {
+  position: absolute;
+  bottom: 12px; left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 3;
+}
+.slider-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.slider-dot.active {
+  background: var(--green-lite);
+}
+</style>
+<section class="hero" style="background:var(--bg); min-height:80vh; display:flex; align-items:center; overflow:hidden;">
+  <div class="container hero-split" style="display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;">
+    <div class="hero-content" style="padding-top:0; max-width:600px;">
+      <div class="hero-eyebrow" style="background:var(--green-pale); color:var(--green-mid); border:none; box-shadow:none;"><span class="dot" style="background:var(--green-mid);box-shadow:none;"></span>Certified Natural Since 2021</div>
+      <h1 style="color:var(--ink); font-size:clamp(3.5rem, 7vw, 5.5rem); letter-spacing: -0.04em; font-family:var(--font-display); animation:none;">Healing Soil,<br><em style="background:none; -webkit-text-fill-color:inherit; color:var(--green-lite); font-style:italic;">Nourishing Life</em></h1>
+      <p class="hero-desc" style="color:var(--muted); font-size:1.1rem; animation:none; max-width:100%;">Premium natural farming products crafted with care for sustainable agriculture. Transform your farm with our certified natural solutions used by 10,000+ farmers.</p>
+      <div class="hero-btns" >
+        <a href="shop.html" class="btn btn-primary btn-lg" style="background:var(--green); color:white; box-shadow:var(--shadow-sm);">Shop Now →</a>
+        <a href="about.html" class="btn btn-outline btn-lg">Our Story</a>
+      </div>
+      <div class="hero-stats" style="border-top:1px solid var(--border); margin-top:40px; padding-top:24px; animation:none;">
+        <div><div class="hero-stat-num" style="color:var(--ink); font-size:2rem;">10K+</div><div class="hero-stat-label" style="color:var(--muted);">Happy Farmers</div></div>
+        <div><div class="hero-stat-num" style="color:var(--ink); font-size:2rem;">40%</div><div class="hero-stat-label" style="color:var(--muted);">Yield Increase</div></div>
+        <div><div class="hero-stat-num" style="color:var(--ink); font-size:2rem;">100%</div><div class="hero-stat-label" style="color:var(--muted);">Certified Natural</div></div>
+      </div>
+    </div>
+    <div class="hero-image anim" style="position:relative; animation-delay:0.2s;">
+      <div class="deals-slider-container">
+        <div class="hot-deals-badge">
+          <span class="pulse-dot"></span> Flash Deals
+        </div>
+        <div id="deals-slider-inner">
+          <div class="deal-slide active">
+            <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80" class="deal-image" alt="Farming">
+          </div>
+        </div>
+        <div class="slider-dots" id="deals-slider-dots"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="features-bar">
+  <div class="container"><div class="features-row">
+    <div class="feat-item"><div class="feat-icon">🚚</div>Free delivery on all orders</div>
+    <div class="feat-item"><div class="feat-icon">🌿</div>100% Certified Natural</div>
+    
+    <div class="feat-item"><div class="feat-icon">🔒</div>Secure payments</div>
+  </div></div>
+</div>
+
+<section class="featured-sec">
+  <div class="container">
+    <div class="section-header anim">
+      <div class="section-label">🌱 Our Products</div>
+      <h2>Featured Products</h2>
+      <p>Discover our premium natural products designed to enhance your farming experience</p>
+    </div>
+    <div class="products-grid" id="products-container">
+      <!-- Loading Placeholders (Skeletons) -->
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+    </div>
+    <div class="view-all-wrap"><a href="shop.html" class="btn btn-outline btn-lg">View All Products →</a></div>
+  </div>
+</section>
+
+<section class="why-sec">
+  <div class="container">
+    <div class="section-header"><div class="section-label">✦ Why Us</div><h2>Why Choose EarthNsol</h2><p>We're committed to providing the finest natural farming solutions</p></div>
+    <div class="why-grid">
+      <div class="why-card anim"><div class="why-icon">🌿</div><h3>100% Natural</h3><p>All products are certified natural and chemical-free for healthier soil</p></div>
+      <div class="why-card anim-2"><div class="why-icon">🛡️</div><h3>Quality Assured</h3><p>Lab-tested products meeting the highest international standards</p></div>
+      <div class="why-card anim-3"><div class="why-icon">📈</div><h3>Proven Results</h3><p>Increase crop yield by 30–40% naturally with our formulations</p></div>
+      <div class="why-card anim-4"><div class="why-icon">♻️</div><h3>Eco-Friendly</h3><p>Sustainable farming practices for a better tomorrow</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter-sec">
+  <div class="container">
+    <div class="nl-box anim">
+      <div class="section-label" style="margin-bottom:12px;">Stay Updated</div>
+      <h2>Join Our Natural Community</h2>
+      <p>Subscribe to our newsletter for access to exclusive farming tips, discounts, and natural agriculture news.</p>
+      <form class="nl-form" onsubmit="subscribeNewsletter(event)">
+        <input type="email" class="nl-input" placeholder="Enter your email address..." required>
+        <button type="submit" class="nl-btn">Subscribe ➔</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec">
+  <div class="container">
+    <div class="section-label" style="color:#7dd494;background:rgba(94,196,113,0.12);border-color:rgba(94,196,113,0.3)">🚀 Get Started</div>
+    <h2 style="margin-top:12px">Ready to Transform Your Farm?</h2>
+    <p>Join 10,000+ farmers who trust EarthNsol for their natural needs.</p>
+    <a href="shop.html" class="btn btn-lg" style="background:white;color:var(--green);font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,0.3)">Shop All Products →</a>
+  </div>
+</section>
+
+<section class="testimonials-sec">
+  <div class="container">
+    <div class="section-header"><div class="section-label">💬 Testimonials</div><h2>What Our Farmers Say</h2><p>Real experiences from farmers across India</p></div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card anim"><div class="stars">★★★★★</div><p>"EarthNsol vermicompost has transformed my farm. My crop yield increased by 35% in just one season!"</p><div class="reviewer"><div class="reviewer-av">R</div><div><h5>Rajesh Patil</h5><span>Maharashtra</span></div></div></div>
+      <div class="testimonial-card anim-2"><div class="stars">★★★★★</div><p>"The quality of natural products is outstanding. My vegetables are healthier and taste much better now."</p><div class="reviewer"><div class="reviewer-av">P</div><div><h5>Priya Kulkarni</h5><span>Maharashtra</span></div></div></div>
+      <div class="testimonial-card anim-3"><div class="stars">★★★★★</div><p>"Excellent customer service and genuine natural products. Highly recommended for sustainable farming."</p><div class="reviewer"><div class="reviewer-av">A</div><div><h5>Amit Deshmukh</h5><span>Maharashtra</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:14px"><img src="logo.jpg" class="es-logo-img" alt="EarthNsol"><div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div></div>
+        <p>Premium natural farming products crafted with care for sustainable agriculture.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/share/1EJi8jieNZ/" target="_blank" class="social-link fb" title="Facebook"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          <a href="https://instagram.com/earthNsol" target="_blank" class="social-link ig" title="Instagram"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="https://www.youtube.com/@earthnsol" target="_blank" class="social-link yt" title="YouTube"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul><li><a href="shop.html?category=Vermicompost">Vermicompost</a></li><li><a href="shop.html?category=Vermiwash">Vermiwash</a></li><li><a href="shop.html?category=Activated%20Charcoal">Activated Charcoal</a></li><li><a href="shop.html?category=Fertilizers">Fertilizers</a></li></ul></div>
+      <div class="footer-col"><h4>Contact Us</h4><div class="footer-contact-item"><span>📍</span><span>Ratnagiri, Maharashtra, India</span></div><div class="footer-contact-item"><span>📞</span><span>+91 9067555693</span></div><div class="footer-contact-item"><span>✉️</span><span>earthnsol@gmail.com</span></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 EarthNsol. All rights reserved. Made with ♥ for sustainable farming.</p><p>Powered by Nature</p></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+  async function updateHeaderOnAuth() {
+    try {
+      const res = await window.apiFetch('/api/auth/session');
+      const session = res.session || null;
+      const btnLogin = document.getElementById("btn-login");
+      const btnProfile = document.getElementById("btn-profile");
+
+      if (session && session.user) {
+        if (btnLogin) btnLogin.style.display = "none";
+        const email = session.user.email;
+        const shortName = email ? email.split('@')[0] : 'User';
+        if (btnProfile) {
+          btnProfile.style.display = "flex";
+          btnProfile.innerHTML = `
+            <i class="fas fa-user-circle"></i>
+            <span>Hi, ${shortName}</span>
+          `;
+        }
+      } else {
+        if (btnLogin) btnLogin.style.display = "flex";
+        if (btnProfile) btnProfile.style.display = "none";
+      }
+    } catch(e) {
+      const btnLogin = document.getElementById("btn-login");
+      const btnProfile = document.getElementById("btn-profile");
+      if (btnLogin) btnLogin.style.display = "flex";
+      if (btnProfile) btnProfile.style.display = "none";
+    }
+  }
+async function init() {
+  try {
+    await updateHeaderOnAuth();
+  } catch(e) { console.error('Session error:', e); }
+  
+  try { await loadDeals(); } catch(e) { console.error('Deals error:', e); }
+  try { await updateCartBadge(); } catch(e) { console.error('Cart error:', e); }
+  try { await loadProducts(); } catch(e) { console.error('Products error:', e); }
+}
+
+async function subscribeNewsletter(event) {
+  event.preventDefault();
+  const input = event.target.querySelector('.nl-input');
+  const btn = event.target.querySelector('.nl-btn');
+  const email = input.value.trim();
+  if (!email) return;
+  
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = '...';
+  try {
+    await window.apiFetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ email })
+    });
+    alert('Thank you for subscribing to our community!');
+    event.target.reset();
+  } catch (err) {
+    alert(err.message || 'Failed to subscribe. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+let currentDealIdx = 0;
+let dealsArr = [];
+let rawDeals = [];
+let activeDealsProductIds = [];
+let activeDealsMap = {};
+
+async function loadDeals() {
+  const container = document.getElementById('deals-slider-inner');
+  if(!container) return;
+  try {
+    const [dealsRes, productsRes] = await Promise.all([
+      window.apiFetch('/api/deals'),
+      window.apiFetch('/api/products?limit=100')
+    ]);
+    
+    const deals = dealsRes.data || [];
+    const products = productsRes.data || [];
+    const productIds = new Set(products.map(p => p.id));
+    rawDeals = deals;
+
+    if (deals.length) {
+      dealsArr = deals.filter(d => d && !d.is_marquee).map(d => {
+        if (!d.link_url) return d;
+        const match = d.link_url.match(/[?&]id=([^&]+)/);
+        // If the link points at a product id that no longer exists (e.g. a
+        // stale/localhost id), keep the deal visible but drop the dead link
+        // instead of silently hiding the whole deal from the homepage.
+        if (match && !productIds.has(match[1])) {
+          console.warn(`[deals] Deal "${d.title}" links to product id "${match[1]}" which was not found in the live products table. Showing the deal without a clickable link. Double-check the product ID in the admin panel.`, d);
+          return { ...d, link_url: '' };
+        }
+        return d;
+      });
+
+      activeDealsMap = {};
+      activeDealsProductIds = deals.map(d => {
+        if (!d.link_url) return null;
+        const match = d.link_url.match(/[?&]id=([^&]+)/);
+        if (match && productIds.has(match[1])) {
+          activeDealsMap[match[1]] = d.image_url;
+          return match[1];
+        }
+        return null;
+      }).filter(Boolean);
+    }
+  } catch(err) { console.error('Error fetching deals', err); }
+  
+  if(dealsArr.length === 0) {
+    const sliderContainer = document.querySelector('.deals-slider-container');
+    if (sliderContainer) sliderContainer.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = dealsArr.map((d, i) => {
+    let targetLink = d.link_url || '';
+    if (targetLink) {
+      try {
+        const parsedUrl = new URL(targetLink);
+        targetLink = window.location.origin + parsedUrl.pathname + parsedUrl.search;
+      } catch(e) {
+        // relative link or simple id
+      }
+    }
+    return `
+      <div class="deal-slide ${i===0?'active':''}" onclick="if('${targetLink}') window.location.href='${targetLink}'" style="${targetLink?'cursor:pointer':''}">
+        <img src="${d.image_url}" class="deal-image" alt="Deal">
+        <div class="deal-caption">
+          <h3>${d.title}</h3>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const dots = document.getElementById('deals-slider-dots');
+  if(dealsArr.length > 1) {
+    dots.innerHTML = dealsArr.map((_, i) => `<div class="slider-dot ${i===0?'active':''}" onclick="showDeal(${i})"></div>`).join('');
+    setInterval(() => showDeal((currentDealIdx + 1) % dealsArr.length), 2400);
+  } else {
+    dots.innerHTML = '';
+  }
+}
+
+function showDeal(idx) {
+  currentDealIdx = idx;
+  const slides = document.querySelectorAll('.deal-slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  slides.forEach((s, i) => i === idx ? s.classList.add('active') : s.classList.remove('active'));
+  dots.forEach((d, i) => i === idx ? d.classList.add('active') : d.classList.remove('active'));
+}
+
+async function loadProducts() {
+  const c = document.getElementById('products-container');
+  try {
+    const res = await window.apiFetch('/api/products?limit=100');
+    const products = res.data || [];
+    
+    // Merge active deals as products at the front
+    const dealProducts = [];
+    const productMap = new Map(products.map(p => [p.id, p]));
+    const usedProductIds = new Set();
+    
+    rawDeals.forEach(d => {
+      if (!d.active || (d.expires_at && new Date(d.expires_at) < new Date())) return;
+      if (!d.link_url) return;
+      const match = d.link_url.match(/[?&]id=([^&]+)/);
+      if (match) {
+        const prodId = match[1];
+        const originalProd = productMap.get(prodId);
+        if (originalProd && !usedProductIds.has(prodId)) {
+          usedProductIds.add(prodId);
+          // Create a copy of the product with deal details
+          const dealProd = {
+            ...originalProd,
+            name: d.title,
+            images: [d.image_url],
+            immage_url: d.image_url,
+            image_url: d.image_url,
+            isDealProduct: true
+          };
+          dealProducts.push(dealProd);
+        }
+      }
+    });
+    
+    const remainingProducts = products;
+    const combined = [...dealProducts, ...remainingProducts].slice(0, 3);
+    
+    if (!combined.length) { 
+      c.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted)">No products found.</div>`; 
+      return; 
+    }
+    c.innerHTML = combined.map((p,i) => productCardHTML(p,i)).join('');
+  } catch(err) { 
+    c.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#c0392b">⚠️ ${err.message}</div>`; 
+  }
+}
+
+function productCardHTML(p, i=0) {
+  const img = (p.images && Array.isArray(p.images) && p.images[0]) || p.immage_url || p.image_url || 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80';
+  let defaultPrice = Number(p.price);
+  const cat = p.category || 'Natural';
+  const oos = (p.stock !== null && p.stock !== undefined && Number(p.stock) === 0);
+  const safeName = (p.name || 'Unnamed Product').replace(/'/g, "\\'");
+  
+  let pVar = {};
+  if (p.variants) { try { pVar = typeof p.variants === 'string' ? JSON.parse(p.variants) : p.variants; } catch(e) {} }
+  const vKeys = Object.keys(pVar || {});
+  
+  let varHtml = '';
+  if (vKeys.length > 0) {
+    const defaultVar = vKeys[0];
+    defaultPrice = Number(pVar[defaultVar]);
+    window.cardVariantsData[p.id] = { name: defaultVar, price: defaultPrice };
+    
+    const btnHtml = vKeys.map(k => {
+      const isActive = k === defaultVar;
+      const bc = isActive ? 'var(--green)' : 'var(--border)';
+      const bg = isActive ? 'var(--green-pale)' : 'var(--surface)';
+      const co = isActive ? 'var(--green)' : 'var(--ink)';
+      return `<button type="button" onclick="event.stopPropagation(); window.updateCardVariant(this, '${p.id}', '${k.replace(/'/g,"\\'")}', ${pVar[k]})" style="padding:4px 8px; border:2px solid ${bc}; background:${bg}; color:${co}; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all .2s;">${k}</button>`;
+    }).join('');
+    varHtml = `<div class="card-variants" style="display:flex;gap:4px;margin:8px 0;flex-wrap:wrap;">${btnHtml}</div>`;
+  }
+  
+  const hasActiveDeal = !!p.isDealProduct;
+  const dealBadge = hasActiveDeal ? '<span class="deal-tag" style="position:absolute;top:10px;left:10px;background:#2ecc71;color:white;font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(46,204,113,0.4);z-index:2;letter-spacing:0.05em;text-transform:uppercase;">🔥 Deal</span>' : '';
+  const dealClass = hasActiveDeal ? 'is-deal' : '';
+
+  return `<div class="product-card ${dealClass}" style="animation-delay:${i*0.08}s" onclick="window.location.href='product-detail.html?id=${p.id}'">
+    <div class="card-img">
+      <div class="card-price-top" id="card-price-top-${p.id}">₹${defaultPrice.toLocaleString('en-IN')}</div>
+      <img src="${img}" alt="${p.name || 'Unnamed Product'}" onerror="this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80'">
+      <span class="natural-tag">100% Natural</span>
+      ${dealBadge}
+      ${oos ? '<span class="out-of-stock-tag">Out of Stock</span>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-category">${cat}</div><h3>${p.name || 'Unnamed Product'}</h3><p class="card-desc">${p.description || ''}</p>
+      ${varHtml}
+      <div class="card-footer" style="${varHtml ? 'margin-top:auto;' : ''}">
+        <button class="btn-cart" onclick="event.stopPropagation(); window.doCardAddToCart('${p.id}','${safeName}',this)">🛒 Cart</button>
+        ${oos ? '' : `<button class="btn-buy-now" onclick="event.stopPropagation(); window.doCardBuyNow('${p.id}','${safeName}',${p.price},this)">⚡ Buy</button>`}
+      </div>
+    </div></div>`;
+}
+
+document.addEventListener("DOMContentLoaded", function() { init(); });
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>

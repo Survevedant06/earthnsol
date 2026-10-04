@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>About EarthNsol – Our Story in Natural & Organic Farming | India</title>
+<meta name="description" content="Learn about EarthNsol's mission to heal soil and nourish life through certified natural farming products. Discover our story, values, and commitment to sustainable agriculture across India."/>
+<meta name="keywords" content="about earthnsol, organic farming company India, sustainable agriculture brand, natural farming mission, vermicompost manufacturer India"/>
+<link rel="canonical" href="https://earthnsol.in/about.html"/>
+<meta property="og:title" content="About EarthNsol – Our Story in Natural & Organic Farming | India"/>
+<meta property="og:description" content="Learn about EarthNsol's mission to heal soil and nourish life through certified natural farming products. Discover our story, values, and commitment to sustainable agriculture across India."/>
+<meta property="og:image" content="https://earthnsol.in/logo.jpg"/>
+<meta property="og:url" content="https://earthnsol.in/about.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="EarthNsol"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="About EarthNsol – Our Story in Natural & Organic Farming | India"/>
+<meta name="twitter:description" content="Learn about EarthNsol's mission to heal soil and nourish life through certified natural farming products. Discover our story, values, and commitment to sustainable agriculture across India."/>
+<meta name="twitter:image" content="https://earthnsol.in/logo.jpg"/>
+<link rel="stylesheet" href="styles.css">
+<style>
+.about-hero{background:linear-gradient(135deg,#2d5a35 0%,#3a7d44 60%,#52b788 100%);padding:80px 0;text-align:center}
+.about-hero h1{font-size:clamp(2.2rem,5vw,3.4rem);color:white;margin-bottom:14px}
+.about-hero p{color:rgba(255,255,255,0.8);font-size:1.05rem;max-width:600px;margin:0 auto}
+
+.mission-sec{padding:80px 0}
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.mission-img{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg);position:relative}
+.mission-img img{width:100%;height:460px;object-fit:cover;display:block}
+.mission-img .badge-overlay{
+  position:absolute;top:20px;right:20px;
+  background:var(--green);color:white;
+  border-radius:14px;padding:14px 20px;text-align:center;
+  box-shadow:var(--shadow-md);
+}
+.mission-img .badge-overlay strong{font-size:1.6rem;display:block;font-family:'Playfair Display',serif}
+.mission-img .badge-overlay span{font-size:0.78rem;opacity:0.85}
+.mission-text h2{font-size:clamp(1.8rem,3vw,2.4rem);color:var(--ink);margin-bottom:16px}
+.mission-text p{font-size:0.92rem;color:var(--muted);line-height:1.85;margin-bottom:14px}
+
+/* Stats */
+.stats-sec{background:var(--cream-dark);padding:60px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center}
+.stat-item{padding:32px 20px;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin:0 auto 14px;
+}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.stat-label{font-size:0.82rem;color:var(--muted);font-weight:500}
+
+/* Values */
+.values-sec{padding:80px 0}
+.values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.value-card{background:white;border-radius:var(--r-lg);padding:32px 22px;border:1px solid var(--border);transition:transform .3s,box-shadow .3s}
+.value-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.value-icon{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;margin-bottom:16px;
+}
+.value-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:8px}
+.value-card p{font-size:0.83rem;color:var(--muted);line-height:1.6}
+
+/* Team */
+.team-sec{background:var(--cream-dark);padding:80px 0}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.team-card{background:white;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);transition:transform .3s,box-shadow .3s}
+.team-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.team-card img{width:100%;height:220px;object-fit:cover;display:block}
+.team-card-info{padding:20px 24px}
+.team-card-info h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--ink);margin-bottom:4px}
+.team-card-info p{font-size:0.82rem;color:var(--green);font-weight:600}
+
+@media(max-width:900px){.mission-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}.values-grid{grid-template-columns:repeat(2,1fr)}.team-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}.values-grid{grid-template-columns:1fr}}
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" class="es-logo-img" alt="EarthNsol">
+        <div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')">☰</button>
+      <nav id="main-nav"><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></nav>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <span class="welcome-text" id="welcome-text">Welcome, Guest</span>
+        <button class="nav-btn nav-btn-cart" onclick="window.location.href='cart.html'" title="Cart">🛒 <span class="nav-btn-text">Cart</span> <span class="cart-badge" id="cart-count" style="display:flex">0</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="about-hero">
+  <div class="container">
+    <h1 class="anim">About EarthNsol</h1>
+    <p class="anim-2">Pioneering sustainable agriculture through premium natural products that nurture the earth and empower farmers.</p>
+  </div>
+</div>
+
+<!-- Mission -->
+<section class="mission-sec">
+  <div class="container">
+    <div class="mission-grid">
+      <div class="mission-img anim">
+        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=700&q=80" alt="Farming">
+        <div class="badge-overlay"><strong>100%</strong><span>Natural & Certified</span></div>
+      </div>
+      <div class="mission-text anim-2">
+        <h2>Our Mission</h2>
+        <p>At EarthNsol, we believe in the power of nature to transform agriculture. Our mission is to provide farmers with premium natural products that enhance soil health, increase crop yields, and promote sustainable farming practices.</p>
+        <p>Founded in 2021, we've dedicated ourselves to researching and developing natural solutions that work in harmony with nature — not against it. Every product we create reflects our deep commitment to the earth and the farming communities we serve.</p>
+        <a href="shop.html" class="btn btn-green btn-lg" style="margin-top:12px">Explore Products →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-sec">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item anim"><div class="stat-icon">👨‍👩‍👧‍👦</div><div class="stat-num">10,000+</div><div class="stat-label">Happy Farmers</div></div>
+      <div class="stat-item anim-2"><div class="stat-icon">🏆</div><div class="stat-num">15+</div><div class="stat-label">Certifications</div></div>
+      <div class="stat-item anim-3"><div class="stat-icon">📈</div><div class="stat-num">40%</div><div class="stat-label">Yield Increase</div></div>
+      <div class="stat-item anim-4"><div class="stat-icon">🎯</div><div class="stat-num">5 Years</div><div class="stat-label">Experience</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values-sec">
+  <div class="container">
+    <div class="section-header"><h2>Our Values</h2><p>The principles that guide everything we do</p></div>
+    <div class="values-grid">
+      <div class="value-card anim"><div class="value-icon">🌿</div><h3>Sustainability</h3><p>Committed to eco-friendly practices that protect our planet for future generations.</p></div>
+      <div class="value-card anim-2"><div class="value-icon">🛡️</div><h3>Quality</h3><p>Premium, certified natural products that meet the highest international standards.</p></div>
+      <div class="value-card anim-3"><div class="value-icon">❤️</div><h3>Community</h3><p>Supporting local farmers and building a sustainable agricultural ecosystem.</p></div>
+      <div class="value-card anim-4"><div class="value-icon">🌍</div><h3>Innovation</h3><p>Combining traditional wisdom with modern natural farming techniques.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo" style="margin-bottom:12px"><img src="logo.jpg" class="es-logo-img" alt="EarthNsol"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div><p>Premium natural farming products for sustainable agriculture and healthier crops.</p>          <div class="social-links">
+            <a href="https://www.facebook.com/share/1EJi8jieNZ/" target="_blank" class="social-link fb" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com/earthNsol" target="_blank" class="social-link ig" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@earthnsol" target="_blank" class="social-link yt" title="YouTube">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+          </div></div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Products</h4><ul><li><a href="shop.html?category=Vermicompost">Vermicompost</a></li><li><a href="shop.html?category=Vermiwash">Vermiwash</a></li><li><a href="shop.html?category=Activated%20Charcoal">Activated Charcoal</a></li></ul></div>
+      <div class="footer-col"><h4>Contact Us</h4><div class="footer-contact-item"><span>📍</span><span>Ratnagiri, Maharashtra, India</span></div><div class="footer-contact-item"><span>📞</span><span>+91 9067555693</span></div><div class="footer-contact-item"><span>✉️</span><span>earthnsol@gmail.com</span></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 EarthNsol. All rights reserved. Made with ♥ for sustainable farming.</p></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+async function init() {
+  const { session } = await window.apiFetch('/api/auth/session').catch(()=>({session:null}));
+  const btnLogin = document.getElementById("btn-login");
+  const btnProfile = document.getElementById("btn-profile");
+
+  if (session && session.user) {
+    if (btnLogin) btnLogin.style.display = "none";
+    const email = session.user.email;
+    const shortName = email ? email.split('@')[0] : 'User';
+    if (btnProfile) {
+      btnProfile.style.display = "flex";
+      btnProfile.innerHTML = `
+        <i class="fas fa-user-circle"></i>
+        <span>Hi, ${shortName}</span>
+      `;
+    }
+  }
+  await updateCartBadge();
+}
+document.addEventListener("DOMContentLoaded", function() { init(); });
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>
