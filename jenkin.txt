@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+    stages {
+        stage('Docker Build') {
+            steps {
+                bat 'docker build -t earthnsol-app:latest .'
+            }
+        }
+        stage('Docker Run') {
+            steps {
+                bat 'docker stop earthnsol-app || true'
+                bat 'docker rm earthnsol-app || true'
+                bat 'docker run -d -p 8080:80 --name earthnsol-app earthnsol-app:latest'
+            }
+        }
+    }
+}
