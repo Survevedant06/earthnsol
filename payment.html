@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>Payment — EarthNsol</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.pay-sec{padding:48px 0 80px}
+.pay-sec h1{font-size:clamp(1.6rem,3vw,2.2rem);color:var(--ink);margin-bottom:32px}
+.pay-layout{display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start}
+
+.pay-box{background:white;border-radius:var(--r-lg);border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
+.pay-box-head{padding:16px 22px;background:var(--cream);border-bottom:1px solid var(--border)}
+.pay-box-head h3{font-size:0.95rem;font-weight:700;color:var(--ink)}
+.pay-box-body{padding:20px 22px}
+
+.method{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;border:2px solid var(--border);margin-bottom:10px;cursor:pointer;transition:all .2s}
+.method:hover{border-color:var(--green-lite)}
+.method.active{border-color:var(--green);background:var(--green-pale)}
+.method input[type=radio]{accent-color:var(--green);width:17px;height:17px;flex-shrink:0}
+.method-icon{font-size:1.4rem;width:36px;text-align:center}
+.method h4{font-size:0.88rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.method p{font-size:0.76rem;color:var(--muted)}
+
+.sub-form{background:var(--cream);border-radius:9px;padding:14px;margin-top:2px;display:none}
+.sub-form.show{display:block}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;color:var(--ink);background:white;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--green)}
+.field-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cod-msg{background:#e8f5e9;border-radius:9px;padding:12px;font-size:0.83rem;color:var(--green);font-weight:500;margin-top:4px;display:none}
+.cod-msg.show{display:block}
+
+/* Order sidebar */
+.order-side{background:white;border-radius:var(--r-lg);border:1px solid var(--border);padding:24px;position:sticky;top:84px}
+.order-side h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--ink);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.o-item{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.o-item img{width:50px;height:50px;border-radius:8px;object-fit:cover;border:1px solid var(--border)}
+.o-item-info{flex:1}
+.o-item-info h4{font-size:0.83rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.o-item-info p{font-size:0.73rem;color:var(--muted)}
+.o-item-price{font-size:0.85rem;font-weight:700;color:var(--green);white-space:nowrap}
+.o-row{display:flex;justify-content:space-between;font-size:0.84rem;color:var(--muted);margin-bottom:7px}
+.o-divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.o-total{display:flex;justify-content:space-between;font-weight:700;font-size:1rem;color:var(--ink)}
+.o-total span:last-child{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--green)}
+.o-addr{margin-top:12px;padding:10px;background:var(--cream);border-radius:8px;font-size:0.78rem;color:var(--muted);line-height:1.6}
+
+.pay-btn{width:100%;padding:14px;margin-top:18px;background:linear-gradient(135deg,var(--green),var(--green-mid));color:white;border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
+.pay-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(58,125,68,0.3)}
+.pay-btn:disabled{opacity:0.6;transform:none;cursor:not-allowed}
+
+/* Success overlay */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.success-card{background:white;border-radius:24px;padding:48px 36px;text-align:center;max-width:420px;width:90%;animation:fadeUp .5s ease}
+.success-card .tick{font-size:4rem;margin-bottom:12px}
+.success-card h2{font-size:1.8rem;color:var(--ink);margin-bottom:8px}
+.success-card p{color:var(--muted);margin-bottom:6px;font-size:0.9rem}
+.order-id-tag{display:inline-block;background:var(--green-pale);color:var(--green);padding:6px 16px;border-radius:20px;font-size:0.82rem;font-weight:700;margin:12px 0 24px}
+
+@media(max-width:900px){.pay-layout{grid-template-columns:1fr}.order-side{position:static}.field-2{grid-template-columns:1fr}}
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" class="es-logo-img" alt="EarthNsol">
+        <div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')">☰</button>
+      <nav id="main-nav"><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></nav>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <span class="welcome-text" id="welcome-text">Welcome, Guest</span>
+        <button class="nav-btn nav-btn-cart" onclick="window.location.href='cart.html'" title="Cart">🛒 <span class="nav-btn-text">Cart</span> <span class="cart-badge" id="cart-count" style="display:flex">0</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Breadcrumb -->
+<div style="background:white;border-bottom:1px solid var(--border);padding:11px 0">
+  <div class="container" style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--muted)">
+    <a href="shop.html" style="color:var(--muted)">Shop</a><span>›</span>
+    <a href="cart.html" style="color:var(--muted)">Cart</a><span>›</span>
+    <span style="color:var(--green);font-weight:600">Payment</span>
+  </div>
+</div>
+
+<section class="pay-sec">
+  <div class="container">
+    <h1>💳 Payment</h1>
+    <div class="pay-layout">
+
+      <!-- Left: Methods -->
+      <div>
+        <!-- Razorpay / Online Payment -->
+        <div class="pay-box">
+          <div class="pay-box-head"><h3>Online Payment</h3></div>
+          <div class="pay-box-body">
+            <div class="method active" onclick="pick('razorpay',this)">
+              <input type="radio" name="pm" checked>
+              <div class="method-icon">💳</div>
+              <div><h4>Razorpay (UPI, Cards, NetBanking)</h4><p>Secure online payment powered by Razorpay</p></div>
+            </div>
+            <div class="sub-form show" id="razorpay-form">
+              <p style="font-size:0.83rem;color:var(--muted);line-height:1.5">You will securely pay online via Razorpay. All UPI apps (GPay, PhonePe, Paytm), NetBanking, and Credit/Debit cards are supported.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="order-side">
+        <h3>Order Summary</h3>
+        <div id="order-items"></div>
+        <hr class="o-divider">
+        <div class="o-row"><span>Subtotal</span><span id="p-subtotal">₹0</span></div>
+        <div class="o-row" id="p-discount-row" style="display:none; color:var(--green); font-weight:600;"><span>Discount</span><span id="p-discount">-₹0</span></div>
+        <div class="o-row"><span>Shipping</span><span id="p-shipping">₹0</span></div>
+        <hr class="o-divider">
+        <div class="o-total"><span>Total</span><span id="p-grand">₹0</span></div>
+        <div class="o-addr" id="o-addr"></div>
+        <button class="pay-btn" id="pay-btn" onclick="placeOrder()">🔒 Pay Now</button>
+        <p style="text-align:center;font-size:0.73rem;color:var(--muted);margin-top:8px">🔒 100% Secure & Encrypted</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Success -->
+<div class="overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="tick">🎉</div>
+    <h2>Order Confirmed!</h2>
+    <p>Thank you for shopping with EarthNsol!</p>
+    <p>We'll contact you on your phone with delivery updates.</p>
+    <div class="order-id-tag" id="order-tag">Order #000000</div>
+    <button class="btn btn-green btn-lg" style="width:100%;display:block;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px" onclick="generateInvoice()">⬇️ Download Invoice</button>
+    <a href="orders.html" class="btn btn-outline btn-lg" style="width:100%;display:block;margin-bottom:12px">View Order History 📦</a>
+    <a href="shop.html" class="btn btn-outline btn-lg" style="width:100%;display:block">Continue Shopping →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo" style="margin-bottom:12px"><img src="logo.jpg" class="es-logo-img" alt="EarthNsol"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div><p>Premium natural farming products.</p>
+          <div class="social-links" style="margin-top:14px">
+            <a href="https://www.facebook.com/share/1EJi8jieNZ/" target="_blank" class="social-link fb" title="Facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com/earthNsol" target="_blank" class="social-link ig" title="Instagram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@earthnsol" target="_blank" class="social-link yt" title="YouTube">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+          </div></div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><span>📞</span><span>+91 9067555693</span></div></div>
+      <div class="footer-col"><h4>Address</h4><div class="footer-contact-item"><span>📍</span><span>Maharashtra, India</span></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 EarthNsol. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+let orderData = null;
+let selectedMethod = 'razorpay';
+
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Ladakh",
+  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "Andaman & Nicobar", "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Lakshadweep", "Puducherry"
+];
+
+function parseAddressString(address) {
+  if (!address) return null;
+  const pinMatch = address.match(/\b\d{6}\b/);
+  const pinCode = pinMatch ? pinMatch[0] : '';
+  let state = '';
+  for (const st of INDIAN_STATES) {
+    const regex = new RegExp('\\b' + st.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'i');
+    if (regex.test(address)) {
+      state = st;
+      break;
+    }
+  }
+  let clean = address;
+  if (pinCode) clean = clean.replace(pinCode, '');
+  if (state) {
+    const stateRegex = new RegExp('\\b' + state.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'gi');
+    clean = clean.replace(stateRegex, '');
+  }
+  clean = clean.replace(/^[,\s-]+|[,\s-]+$/g, '').trim();
+  const parts = clean.split(',').map(s => s.trim()).filter(Boolean);
+  let city = '';
+  let street = '';
+  if (parts.length > 0) {
+    city = parts[parts.length - 1];
+    street = parts.slice(0, parts.length - 1).join(', ');
+  }
+  return {
+    street: street || clean,
+    city: city || clean,
+    state,
+    pinCode
+  };
+}
+
+function pick(method, el) {
+  selectedMethod = method;
+  document.querySelectorAll('.method').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.sub-form').forEach(f => f.classList.remove('show'));
+  el.classList.add('active');
+  el.querySelector('input').checked = true;
+  const f = document.getElementById(method + '-form');
+  if (f) f.classList.add('show');
+}
+
+async function recalculatePaymentShipping() {
+  const state = document.getElementById('pay-state').value;
+  const city = document.getElementById('pay-city').value.trim();
+  const pinCode = document.getElementById('pay-pin').value.trim();
+  
+  if (!state || !city || pinCode.length < 6) return;
+  
+  try {
+    const sub = orderData.subtotal || orderData.items.reduce((s,i) => s + (Number(i.price)||0) * (Number(i.quantity)||1), 0);
+    const itemsPayload = orderData.items.map(item => ({
+      name: item.name,
+      quantity: item.quantity
+    }));
+    
+    const res = await window.apiFetch('/api/shipping/calculate', {
+      method: 'POST',
+      body: JSON.stringify({
+        state,
+        city,
+        pinCode,
+        items: itemsPayload,
+        subtotal: sub
+      })
+    });
+    
+    if (res && res.success) {
+      orderData.shipping = res.shippingCharge;
+      orderData.shippingZone = res.zone;
+      orderData.totalWeight = res.totalWeight;
+      
+      const discount = Number(orderData.discountAmount) || 0;
+      orderData.grand = sub + orderData.shipping - discount;
+      
+      // Update displays
+      document.getElementById('p-shipping').textContent = orderData.shipping === 0 ? 'FREE 🎉' : '₹' + orderData.shipping;
+      document.getElementById('p-grand').textContent = '₹' + Number(orderData.grand).toLocaleString('en-IN');
+      document.getElementById('pay-btn').textContent = '🔒 Pay ₹' + Number(orderData.grand).toLocaleString('en-IN');
+      
+      sessionStorage.setItem('pending_order', JSON.stringify(orderData));
+    }
+  } catch(err) {
+    console.error("Payment page shipping calculate error:", err);
+  }
+}
+
+async function loadOrder() {
+  const raw = sessionStorage.getItem('pending_order');
+  if (!raw) { window.location.href = 'cart.html'; return; }
+  orderData = JSON.parse(raw);
+
+  // Fetch user profile for saved shipping details
+  try {
+    const profileRes = await window.apiFetch('/api/user/profile');
+    if (profileRes && profileRes.data) {
+      if (!orderData.address || !orderData.address.trim()) orderData.address = profileRes.data.address || '';
+      if (!orderData.phone || !orderData.phone.trim()) orderData.phone = profileRes.data.phone || '';
+    }
+  } catch(e) { }
+
+  // Always recalculate from items to avoid ₹0 bugs
+  const sub  = orderData.items.reduce((s,i) => s + (Number(i.price)||0) * (Number(i.quantity)||1), 0);
+
+  // Parse address to check if complete and structured
+  let parsedAddress = null;
+  let isComplete = false;
+  if (orderData.address) {
+    parsedAddress = parseAddressString(orderData.address);
+    isComplete = parsedAddress && parsedAddress.state && parsedAddress.pinCode && parsedAddress.pinCode.length === 6;
+  }
+
+  // Pre-calculate shipping from profile/cart address if complete
+  let ship = 0; // Shipping is free storewide; kept as a variable (not deleted) since it still gets overwritten below from /api/shipping/calculate, which is the source of truth if pricing changes later.
+  let zone = orderData.shippingZone || 'rest_of_india';
+  let weight = orderData.totalWeight || 0;
+
+  if (isComplete) {
+    orderData.state = parsedAddress.state;
+    orderData.pinCode = parsedAddress.pinCode;
+    orderData.city = parsedAddress.city;
+    const commaIndex = orderData.address.indexOf(',');
+    orderData.street = commaIndex !== -1 ? orderData.address.substring(0, commaIndex).trim() : orderData.address;
+    try {
+      const itemsPayload = orderData.items.map(item => ({
+        name: item.name,
+        quantity: item.quantity
+      }));
+      const res = await window.apiFetch('/api/shipping/calculate', {
+        method: 'POST',
+        body: JSON.stringify({
+          state: parsedAddress.state,
+          city: parsedAddress.city,
+          pinCode: parsedAddress.pinCode,
+          items: itemsPayload,
+          subtotal: sub
+        })
+      });
+      if (res && res.success) {
+        ship = res.shippingCharge;
+        zone = res.zone;
+        weight = res.totalWeight;
+      }
+    } catch (err) {
+      console.error("Failed to pre-calculate shipping:", err);
+    }
+  } else {
+    // If not complete, clear orderData.address to force the input fields to display
+    orderData.address = '';
+  }
+  
+  // Intercept and auto-apply stored coupon code if not already in orderData
+  let couponCode = orderData.couponCode || localStorage.getItem('es-applied-coupon');
+  let discount = Number(orderData.discountAmount) || 0;
+  
+  if (couponCode) {
+    try {
+      const res = await window.apiFetch('/api/coupons/validate?code=' + encodeURIComponent(couponCode));
+      if (res.success) {
+        orderData.couponCode = res.code;
+        const discountPercent = Number(res.discount_percent) || 0;
+        discount = Math.round((sub * discountPercent) / 100);
+      } else {
+        orderData.couponCode = null;
+        discount = 0;
+      }
+    } catch (e) {
+      console.error('Failed to validate coupon on payment page:', e);
+    }
+  }
+
+  const grand = sub + ship - discount;
+  
+  orderData.subtotal = sub;
+  orderData.shipping = ship;
+  orderData.shippingZone = zone;
+  orderData.totalWeight = weight;
+  orderData.discountAmount = discount;
+  orderData.grand    = grand;
+
+  // Persist updated order back to session storage
+  sessionStorage.setItem('pending_order', JSON.stringify(orderData));
+
+  document.getElementById('order-items').innerHTML = orderData.items.map(i => {
+    const itemImg = i.image || i.image_url || i.immage_url || i.immageurl || (i.products && (i.products.immage_url || i.products.image_url)) || 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100';
+    return `
+      <div class="o-item">
+        <img src="${itemImg}" onerror="this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100'">
+        <div class="o-item-info"><h4>${i.name}</h4><p>Qty: ${i.quantity}</p></div>
+        <div class="o-item-price">₹${Number(i.price * i.quantity).toLocaleString('en-IN')}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('p-subtotal').textContent = '₹' + Number(sub).toLocaleString('en-IN');
+  
+  // Render Discount row
+  const discRow = document.getElementById('p-discount-row');
+  if (discount > 0) {
+    discRow.style.display = 'flex';
+    document.getElementById('p-discount').textContent = `-₹${Number(discount).toLocaleString('en-IN')}`;
+  } else {
+    discRow.style.display = 'none';
+  }
+
+  document.getElementById('p-shipping').textContent = ship === 0 ? 'FREE 🎉' : '₹' + ship;
+  document.getElementById('p-grand').textContent    = '₹' + Number(grand).toLocaleString('en-IN');
+  document.getElementById('pay-btn').textContent    = '🔒 Pay ₹' + Number(grand).toLocaleString('en-IN');
+
+  const hasAddr  = orderData.address && orderData.address.trim();
+  const hasPhone = orderData.phone   && orderData.phone.trim();
+  if (hasAddr && hasPhone) {
+    document.getElementById('o-addr').innerHTML =
+      (hasPhone ? '📞 ' + orderData.phone + '<br>' : '') +
+      (hasAddr  ? '📍 ' + orderData.address : '');
+  } else {
+    const streetVal = parsedAddress ? parsedAddress.street : '';
+    const cityVal = parsedAddress ? parsedAddress.city : '';
+    const pinVal = parsedAddress ? parsedAddress.pinCode : '';
+    const stateVal = parsedAddress ? parsedAddress.state : '';
+
+    document.getElementById('o-addr').innerHTML = `
+      <div id="inline-delivery" style="margin-top:6px">
+        <p style="font-size:0.78rem;color:var(--muted);margin-bottom:8px">Fill in delivery details:</p>
+        <div style="margin-bottom:7px">
+          <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px">Phone *</label>
+          <input type="text" id="pay-phone" value="${orderData.phone||''}" placeholder="+91 9067555693" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;background:var(--surface);color:var(--ink);outline:none">
+        </div>
+        <div style="margin-bottom:7px">
+          <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px">Street Address *</label>
+          <input type="text" id="pay-street" value="${streetVal}" placeholder="House/Flat No, Street Name" onblur="recalculatePaymentShipping()" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;background:var(--surface);color:var(--ink);outline:none">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom:7px;">
+          <div>
+            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px">City *</label>
+            <input type="text" id="pay-city" value="${cityVal}" placeholder="e.g. Ratnagiri" onblur="recalculatePaymentShipping()" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;background:var(--surface);color:var(--ink);outline:none">
+          </div>
+          <div>
+            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px">PIN Code *</label>
+            <input type="text" id="pay-pin" value="${pinVal}" placeholder="6-digit PIN" maxlength="6" oninput="this.value=this.value.replace(/\\D/g,'')" onblur="recalculatePaymentShipping()" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;background:var(--surface);color:var(--ink);outline:none">
+          </div>
+        </div>
+        <div style="margin-bottom:7px">
+          <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px">State *</label>
+          <select id="pay-state" onchange="recalculatePaymentShipping()" style="width:100%;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;background:var(--surface);color:var(--ink);outline:none;">
+            <option value="">Select State</option>
+            ${INDIAN_STATES.map(st => `<option value="${st}" ${st === stateVal ? 'selected' : ''}>${st}</option>`).join('')}
+          </select>
+        </div>
+      </div>`;
+  }
+}
+
+async function placeOrder() {
+  // Collect inline delivery fields if present (Buy Now path)
+  const inlinePh = document.getElementById('pay-phone');
+  const inlineStreet = document.getElementById('pay-street');
+  const inlineCity = document.getElementById('pay-city');
+  const inlineState = document.getElementById('pay-state');
+  const inlinePin = document.getElementById('pay-pin');
+  
+  if (inlinePh && inlineStreet && inlineCity && inlineState && inlinePin) {
+    const ph = inlinePh.value.trim();
+    const street = inlineStreet.value.trim();
+    const city = inlineCity.value.trim();
+    const state = inlineState.value;
+    const pin = inlinePin.value.trim();
+    
+    if (!ph || !street || !city || !state || !pin) {
+      alert('Please fill in all delivery details: Phone, Street, City, State, and PIN Code.');
+      return;
+    }
+    
+    orderData.phone = ph;
+    orderData.address = `${street}, ${city}, ${state} - ${pin}`;
+    orderData.street = street;
+    orderData.city = city;
+    orderData.state = state;
+    orderData.pinCode = pin;
+  }
+
+  const btn = document.getElementById('pay-btn');
+  btn.disabled = true; btn.textContent = 'Preparing Payment...';
+
+  try {
+    const user = await window.getSession();
+    if (!user) { window.location.href = 'login.html'; return; }
+
+    // 1. Create Razorpay order on the backend
+    const createRes = await window.apiFetch('/api/orders/create-razorpay-order', {
+      method: 'POST',
+      body: JSON.stringify({
+        amount: orderData.grand,
+        email: user.email,
+        phone: orderData.phone
+      })
+    });
+
+    const { orderId, amount, keyId, mode } = createRes;
+
+    // If simulation/mock mode is active (no Razorpay keys in env)
+    if (mode === 'test') {
+      alert("⚠️ Razorpay API keys are missing or empty in the server's .env file.\n\nThe system is operating in Simulation Mode. It will simulate a successful payment and auto-confirm your order. To use real payments, fill in the RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in backend/.env and RESTART your node server.");
+      btn.textContent = 'Simulating Payment...';
+      setTimeout(async () => {
+        try {
+          const verifyRes = await window.apiFetch('/api/orders/verify-razorpay-payment', {
+            method: 'POST',
+            body: JSON.stringify({
+              razorpay_payment_id: 'mock_pay_' + Math.random().toString(36).substring(2, 10),
+              razorpay_order_id: orderId,
+              razorpay_signature: 'mock_sig_' + Math.random().toString(36).substring(2, 10),
+              orderData: orderData
+            })
+          });
+
+          const order = verifyRes.order;
+          if (order) {
+            orderData.id = order.id;
+          }
+          sessionStorage.removeItem('pending_order');
+          localStorage.removeItem('es-applied-coupon');
+          await updateCartBadge();
+
+          const tagId = (order?.id || '').substring(0, 6).toUpperCase() || Math.random().toString(36).substring(2, 8).toUpperCase();
+          document.getElementById('order-tag').textContent = 'Order #' + tagId;
+          document.getElementById('success-overlay').classList.add('show');
+        } catch (err) {
+          console.error("Mock verification failed error:", err);
+          alert('❌ Mock Verification Failed!\n\nReason: ' + err.message);
+          btn.disabled = false;
+          btn.textContent = '🔒 Pay ₹' + Number(orderData.grand).toLocaleString('en-IN');
+        }
+      }, 1500);
+      return;
+    }
+
+    // 2. Open Real Razorpay Checkout overlay
+    const token = localStorage.getItem('es-session-token');
+    const options = {
+      key: keyId,
+      amount: amount,
+      currency: "INR",
+      name: "EarthNsol",
+      description: "Organic Farming Order",
+      image: "logo.jpg",
+      order_id: orderId,
+      callback_url: `${CONFIG.BACKEND_URL}/api/orders/verify-razorpay-payment?redirect=true&frontend_origin=${encodeURIComponent(window.location.origin)}&token=${encodeURIComponent(token)}&orderData=${encodeURIComponent(JSON.stringify(orderData))}`,
+      redirect: true,
+      prefill: {
+        name: orderData.fullName || user.user_metadata?.full_name || '',
+        email: user.email,
+        contact: orderData.phone || ''
+      },
+      theme: {
+        color: "#10B981"
+      },
+      modal: {
+        ondismiss: function() {
+          btn.disabled = false;
+          btn.textContent = '🔒 Pay ₹' + Number(orderData.grand).toLocaleString('en-IN');
+        }
+      }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+  } catch (err) {
+    alert('Payment Initiation Failed: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = '🔒 Pay ₹' + Number(orderData.grand).toLocaleString('en-IN');
+  }
+}
+
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('status');
+  if (status === 'success') {
+    const orderId = params.get('orderId');
+    const tagId = (orderId || '').substring(0, 6).toUpperCase() || Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    // Set order tag and show overlay
+    document.getElementById('order-tag').textContent = 'Order #' + tagId;
+    document.getElementById('success-overlay').classList.add('show');
+    
+    // Load pending order data before removing it so we can download the invoice
+    const raw = sessionStorage.getItem('pending_order');
+    if (raw) {
+      orderData = JSON.parse(raw);
+      orderData.id = orderId;
+    }
+    
+    // Clear cart and pending order
+    sessionStorage.removeItem('pending_order');
+    localStorage.removeItem('es-applied-coupon');
+    await updateCartBadge();
+    return;
+  } else if (status === 'failure') {
+    const err = params.get('error') || 'Unknown error';
+    alert('❌ Payment Verification Failed!\n\nReason: ' + decodeURIComponent(err));
+    // Clear status from URL using HTML5 History API to prevent alerts on page refresh
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  const user = await window.getSession();
+  if (user) {
+    const name = user.user_metadata?.full_name || user.email.split('@')[0];
+    document.getElementById('welcome-text').textContent = 'Welcome, ' + name;
+  }
+  await updateCartBadge();
+  loadOrder();
+}
+
+function safeFormatDate(dateStr, includeTime = true) {
+  if (!dateStr) return 'N/A';
+  try {
+    const hasTimezone = dateStr.includes('Z') || dateStr.includes('+');
+    const d = new Date(hasTimezone ? dateStr : dateStr + 'Z');
+    if (isNaN(d.getTime())) {
+      const d2 = new Date(dateStr);
+      if (isNaN(d2.getTime())) return 'N/A';
+      return includeTime 
+        ? d2.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : d2.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    return includeTime 
+      ? d.toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (e) {
+    return 'N/A';
+  }
+}
+
+function getInvoiceHtml(orderData) {
+  const dateStr = safeFormatDate(orderData.created_at, false);
+    
+  const orderIdShort = (orderData.id || '').substring(0, 8).toUpperCase() || 'N/A';
+  
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Invoice - #${orderIdShort}</title>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        
+        :root {
+          --primary: #3a7d44;
+          --primary-light: #4a9955;
+          --ink: #1a2e1d;
+          --muted: #6b8f71;
+          --border: #e0ddd6;
+          --bg: #fcfbf9;
+        }
+        
+        body {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          margin: 0;
+          padding: 40px;
+          background-color: #f5f4f0;
+          color: var(--ink);
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
+        .invoice-card {
+          max-width: 800px;
+          margin: 0 auto;
+          background: #ffffff;
+          padding: 40px;
+          border-radius: 16px;
+          border: 1px solid var(--border);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          box-sizing: border-box;
+        }
+        
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 3px solid var(--primary);
+          padding-bottom: 24px;
+          margin-bottom: 30px;
+        }
+        
+        .logo-area {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        
+        .logo-img {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 2px solid var(--primary);
+        }
+        
+        .logo-text h2 {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.2rem;
+          color: var(--ink);
+          margin: 0;
+          line-height: 1.1;
+        }
+        
+        .logo-text p {
+          font-size: 0.8rem;
+          color: var(--muted);
+          margin: 4px 0 0 0;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-weight: 600;
+        }
+        
+        .invoice-title-area {
+          text-align: right;
+        }
+        
+        .invoice-title-area h3 {
+          font-family: 'Playfair Display', serif;
+          font-size: 2rem;
+          color: var(--primary);
+          margin: 0 0 6px 0;
+          letter-spacing: 0.05em;
+        }
+        
+        .invoice-meta {
+          font-size: 0.85rem;
+          color: var(--muted);
+          margin: 0;
+          line-height: 1.5;
+        }
+        
+        .bill-to-section {
+          display: grid;
+          grid-template-columns: 1.2fr 1fr;
+          gap: 40px;
+          margin-bottom: 40px;
+          font-size: 0.9rem;
+        }
+        
+        .bill-title {
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: var(--muted);
+          margin-bottom: 8px;
+          letter-spacing: 0.07em;
+          border-bottom: 1px solid var(--border);
+          padding-bottom: 4px;
+        }
+        
+        .bill-details {
+          line-height: 1.6;
+          color: var(--ink);
+        }
+        
+        .bill-details strong {
+          font-size: 1.05rem;
+          color: var(--ink);
+          display: block;
+          margin-bottom: 4px;
+        }
+        
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 30px;
+        }
+        
+        th {
+          background-color: var(--primary);
+          color: white;
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 14px 16px;
+          text-align: left;
+        }
+        
+        td {
+          padding: 14px 16px;
+          border-bottom: 1px solid var(--border);
+          font-size: 0.9rem;
+          color: #2c3e50;
+        }
+        
+        tr:hover td {
+          background-color: var(--bg);
+        }
+        
+        .qty-cell {
+          text-align: center;
+        }
+        
+        .price-cell {
+          text-align: right;
+        }
+        
+        .total-section {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        }
+        
+        .total-table {
+          width: 320px;
+          margin-bottom: 0;
+        }
+        
+        .total-table td {
+          padding: 8px 16px;
+          border: none;
+        }
+        
+        .total-table tr.grand-total td {
+          border-top: 2px solid var(--primary);
+          font-family: 'Playfair Display', serif;
+          font-size: 1.3rem;
+          font-weight: 700;
+          color: var(--primary);
+          padding-top: 12px;
+        }
+        
+        .actions {
+          text-align: center;
+          margin-top: 30px;
+        }
+        
+        .print-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 28px;
+          background: linear-gradient(135deg, var(--primary), var(--primary-light));
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          font-size: 0.9rem;
+          font-weight: 700;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(58,125,68,0.2);
+          transition: all 0.2s;
+        }
+        
+        .print-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(58,125,68,0.3);
+        }
+        
+        .footer {
+          text-align: center;
+          color: var(--muted);
+          font-size: 0.85rem;
+          margin-top: 50px;
+          border-top: 1px dashed var(--border);
+          padding-top: 20px;
+          line-height: 1.5;
+        }
+        
+        @media print {
+          body {
+            background-color: #ffffff;
+            padding: 0;
+          }
+          .invoice-card {
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            max-width: 100%;
+          }
+          .print-btn {
+            display: none;
+          }
+          .actions {
+            display: none;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="invoice-card">
+        <div class="header">
+          <div class="logo-area">
+            <img src="logo.jpg" class="logo-img" alt="EarthNsol Logo" onerror="this.style.display='none'">
+            <div class="logo-text">
+              <h2>EarthNsol</h2>
+              <p>Healing Soil, Nourishing Life</p>
+            </div>
+          </div>
+          <div class="invoice-title-area">
+            <h3>INVOICE</h3>
+            <p class="invoice-meta">
+              <strong>Order ID:</strong> #${orderIdShort}<br>
+              <strong>Date:</strong> ${dateStr}
+            </p>
+          </div>
+        </div>
+        
+        <div class="bill-to-section">
+          <div>
+            <div class="bill-title">Bill To</div>
+            <div class="bill-details">
+              <strong>${orderData.fullName || 'Valued Customer'}</strong>
+              ${orderData.phone ? '📞 ' + orderData.phone + '<br>' : ''}
+              ${orderData.address ? '📍 ' + orderData.address : ''}
+            </div>
+          </div>
+          <div>
+            <div class="bill-title">Seller Info</div>
+            <div class="bill-details">
+              <strong>EarthNsol</strong>
+              Ratnagiri, Maharashtra, India<br>
+              Email: earthnsol@gmail.com<br>
+              Phone: +91 9067555693
+            </div>
+          </div>
+        </div>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Product Description</th>
+              <th class="qty-cell" style="width: 10%;">Qty</th>
+              <th class="price-cell" style="width: 20%;">Price</th>
+              <th class="price-cell" style="width: 25%;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orderData.items.map(i => `
+              <tr>
+                <td><strong>${i.name}</strong></td>
+                <td class="qty-cell">${i.quantity || 1}</td>
+                <td class="price-cell">₹${Number(i.price).toLocaleString('en-IN')}</td>
+                <td class="price-cell">₹${Number((i.quantity || 1) * i.price).toLocaleString('en-IN')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <div class="total-section">
+          <table class="total-table">
+            <tr>
+              <td>Subtotal:</td>
+              <td class="price-cell">₹${Number(orderData.subtotal).toLocaleString('en-IN')}</td>
+            </tr>
+            <tr>
+              <td>Shipping:</td>
+              <td class="price-cell">${orderData.shipping === 0 ? 'FREE' : '₹' + Number(orderData.shipping).toLocaleString('en-IN')}</td>
+            </tr>
+            <tr class="grand-total">
+              <td>Grand Total:</td>
+              <td class="price-cell">₹${Number(orderData.grand).toLocaleString('en-IN')}</td>
+            </tr>
+          </table>
+        </div>
+        
+        <div class="actions">
+          <button class="print-btn" onclick="window.print()">
+            🖨️ Print / Save as PDF
+          </button>
+        </div>
+        
+        <div class="footer">
+          <p>Thank you for choosing natural farming! Your purchase supports sustainable agriculture and healthier soils.</p>
+          <p>© 2026 EarthNsol. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+function generateInvoice() {
+  if (!orderData) return;
+  const invHtml = getInvoiceHtml(orderData);
+  const blob = new Blob([invHtml], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+
+document.addEventListener("DOMContentLoaded", function() { init(); });
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>

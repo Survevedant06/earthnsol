@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>Shop Organic Vermicompost & Bio-Fertilizers Online | EarthNsol India</title>
+<meta name="description" content="Shop EarthNsol's range of vermicompost, vermiwash, activated charcoal and organic fertilizers. Certified natural farming inputs, delivered pan-India. Boost soil health and crop yield naturally."/>
+<meta name="keywords" content="buy vermicompost online, organic fertilizer India, vermiwash online, bio-fertilizer shop, activated charcoal for plants, natural farming products, organic soil conditioner, earthnsol shop"/>
+<link rel="canonical" href="https://earthnsol.in/shop.html"/>
+<meta property="og:title" content="Shop Organic Vermicompost & Bio-Fertilizers Online | EarthNsol India"/>
+<meta property="og:description" content="Shop EarthNsol's range of vermicompost, vermiwash, activated charcoal and organic fertilizers. Certified natural farming inputs, delivered pan-India. Boost soil health and crop yield naturally."/>
+<meta property="og:image" content="https://earthnsol.in/logo.jpg"/>
+<meta property="og:url" content="https://earthnsol.in/shop.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="EarthNsol"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Shop Organic Vermicompost & Bio-Fertilizers Online | EarthNsol India"/>
+<meta name="twitter:description" content="Shop EarthNsol's range of vermicompost, vermiwash, activated charcoal and organic fertilizers. Certified natural farming inputs, delivered pan-India. Boost soil health and crop yield naturally."/>
+<meta name="twitter:image" content="https://earthnsol.in/logo.jpg"/>
+<link rel="stylesheet" href="styles.css">
+<style>
+.page-hero{background:linear-gradient(135deg,#2d5a35,#3a7d44);padding:48px 0;text-align:center}
+.page-hero h1{font-size:clamp(1.8rem,4vw,2.6rem);color:white;margin-bottom:8px}
+.page-hero p{color:rgba(255,255,255,0.7)}
+
+.shop-sec{padding:48px 0 80px}
+.shop-layout{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start}
+
+/* Sidebar */
+.filters-sidebar{background:white;border-radius:var(--r-lg);border:1px solid var(--border);overflow:hidden;position:sticky;top:84px}
+.sidebar-section{padding:20px 22px;border-bottom:1px solid var(--border)}
+.sidebar-section:last-child{border-bottom:none}
+.sidebar-section h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:14px}
+
+.cat-btn{
+  display:block;width:100%;text-align:left;
+  background:none;border:none;
+  padding:9px 14px;border-radius:9px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.87rem;
+  font-weight:500;color:var(--ink-mid);
+  transition:all .18s;margin-bottom:2px;cursor:pointer;
+}
+.cat-btn:hover{background:var(--green-pale);color:var(--green)}
+.cat-btn.active{background:var(--green);color:white;font-weight:600}
+
+.price-inputs{display:flex;align-items:center;gap:8px}
+.price-inputs input{
+  flex:1;width:0;min-width:0;padding:6px 8px;
+  border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.83rem;
+  color:var(--ink);background:var(--cream);outline:none;
+  transition:border-color .2s;
+}
+.price-inputs input:focus{border-color:var(--green);background:white}
+.price-inputs span{color:var(--muted);font-size:0.8rem;flex-shrink:0}
+
+.apply-btn{
+  width:100%;margin-top:12px;padding:9px;
+  background:var(--green);color:white;border:none;
+  border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:0.83rem;font-weight:600;cursor:pointer;transition:background .2s;
+}
+.apply-btn:hover{background:var(--green-mid)}
+
+/* Results header */
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.results-info{font-size:0.85rem;color:var(--muted)}
+.results-info strong{color:var(--ink);font-weight:700}
+
+.sort-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sort-btn{
+  padding:7px 14px;border-radius:8px;
+  background:white;border:1.5px solid var(--border);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;
+  font-weight:500;color:var(--ink-mid);cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.sort-btn:hover{border-color:var(--green);color:var(--green)}
+.sort-btn.active{background:var(--green);color:white;border-color:var(--green)}
+
+.search-bar{
+  position:relative;margin-bottom:24px;
+}
+.search-bar input{
+  width:100%;padding:11px 16px 11px 42px;
+  border:1.5px solid var(--border);border-radius:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.88rem;
+  color:var(--ink);background:white;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.search-bar input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(58,125,68,0.1)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1rem}
+
+.no-results{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted)}
+.no-results p{font-size:1rem;margin-bottom:16px}
+
+.close-filters-btn{display:none}
+.product-card.is-deal{border:2px solid #2ecc71 !important;box-shadow:0 8px 24px rgba(46,204,113,0.18) !important}
+@media(max-width:900px){
+  .shop-layout{grid-template-columns:1fr}
+  .mobile-filter-btn{display:block !important;margin-bottom:16px}
+  .filters-sidebar{
+    display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;
+    overflow-y:auto;border-radius:0;border:none;background:white;padding:20px
+  }
+  .filters-sidebar.open{display:block}
+  .close-filters-btn{
+    display:block;margin-top:16px;padding:12px;background:var(--cream);
+    color:var(--ink);width:100%;border:1px solid var(--border);border-radius:8px;
+    cursor:pointer;font-weight:bold;font-family:'Plus Jakarta Sans',sans-serif;
+  }
+}
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" class="es-logo-img" alt="EarthNsol">
+        <div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')">☰</button>
+      <nav id="main-nav"><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></nav>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <span class="welcome-text" id="welcome-text">Welcome, Guest</span>
+        <button class="nav-btn nav-btn-cart" onclick="window.location.href='cart.html'" title="Cart">🛒 <span class="nav-btn-text">Cart</span> <span class="cart-badge" id="cart-count" style="display:flex">0</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="container">
+    <h1>Our Products</h1>
+    <p>Premium certified natural solutions for sustainable farming</p>
+  </div>
+</div>
+
+<section class="shop-sec">
+  <div class="container">
+    <button onclick="document.querySelector('.filters-sidebar').classList.toggle('open')" 
+   style="display:none;margin-bottom:16px;padding:10px 20px;background:var(--green);color:white;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;cursor:pointer;width:100%" 
+   class="mobile-filter-btn">🔍 Show Filters</button>
+<div class="shop-layout">
+
+      <!-- Sidebar -->
+      <aside class="filters-sidebar">
+        <div class="sidebar-section">
+          <h4>Categories</h4>
+          <button class="cat-btn active" onclick="filterCategory('all',this)">All Products</button>
+          <button class="cat-btn" onclick="filterCategory('Vermicompost',this)">Vermicompost</button>
+          <button class="cat-btn" onclick="filterCategory('Vermiwash',this)">Vermiwash</button>
+          <button class="cat-btn" onclick="filterCategory('Activated Charcoal',this)">Activated Charcoal</button>
+          <button class="cat-btn" onclick="filterCategory('Fertilizers',this)">Fertilizers</button>
+          <button class="cat-btn" onclick="filterCategory('Compost',this)">Compost</button>
+          <button class="cat-btn" onclick="filterCategory('Soil Amendments',this)">Soil Amendments</button>
+        </div>
+        
+        <div class="sidebar-section">
+          <h4>Filter By Price</h4>
+          <div class="price-inputs">
+            <input type="number" id="min-price" placeholder="Min" min="0" oninput="applyPriceFilter()">
+            <span>to</span>
+            <input type="number" id="max-price" placeholder="Max" min="0" oninput="applyPriceFilter()">
+          </div>
+          <button class="apply-btn" onclick="applyPriceFilter()">Apply Filter</button>
+        </div>
+
+        <div class="sidebar-section" style="background:var(--green-pale);padding:22px;border-top:1px solid var(--border);">
+          <h4 style="color:var(--green-mid);margin-bottom:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">Need Assistance?</h4>
+          <p style="font-size:0.8rem;color:var(--ink-mid);line-height:1.5;margin-bottom:14px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:500;">Get expert advice directly from our farming specialists.</p>
+          <a href="tel:+919067555693" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--green);color:white;text-decoration:none;font-weight:700;font-size:0.85rem;padding:10px;border-radius:10px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif;transition:background 0.2s;" onmouseover="this.style.background='var(--green-mid)'" onmouseout="this.style.background='var(--green)'">📞 Call Support</a>
+        </div>
+
+        <div class="sidebar-section" style="padding: 12px 22px;">
+          <button class="close-filters-btn" onclick="document.querySelector('.filters-sidebar').classList.remove('open')">Close Filters</button>
+        </div>
+      </aside>
+
+      <!-- Products Area -->
+      <div>
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search products..." oninput="searchProducts()">
+        </div>
+        <div class="results-bar">
+          <p class="results-info">Showing <strong id="count">0</strong> products</p>
+          <div class="sort-controls">
+            <button class="sort-btn active" id="sortbtn-default" onclick="sortProducts('default',this,'sortbtn')">Featured</button>
+            <button class="sort-btn" id="sortbtn-price-asc" onclick="sortProducts('price-asc',this,'sortbtn')">Price ↑</button>
+            <button class="sort-btn" id="sortbtn-price-desc" onclick="sortProducts('price-desc',this,'sortbtn')">Price ↓</button>
+            <button class="sort-btn" id="sortbtn-name" onclick="sortProducts('name',this,'sortbtn')">A–Z</button>
+          </div>
+        </div>
+        <div class="products-grid" id="products-container">
+          <!-- Loading Placeholders (Skeletons) -->
+          <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+          <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+          <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+          <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-title"></div><div class="skeleton-text"></div><div class="skeleton-text" style="width: 55%;"></div><div class="skeleton-btn"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo" style="margin-bottom:12px"><img src="logo.jpg" class="es-logo-img" alt="EarthNsol"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div><p>Premium natural farming products for sustainable agriculture.</p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/share/1EJi8jieNZ/" target="_blank" class="social-link fb" title="Facebook">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://instagram.com/earthNsol" target="_blank" class="social-link ig" title="Instagram">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@earthnsol" target="_blank" class="social-link yt" title="YouTube">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+          </div></div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Categories</h4><ul><li><a href="shop.html?category=Vermicompost">Vermicompost</a></li><li><a href="shop.html?category=Vermiwash">Vermiwash</a></li><li><a href="shop.html?category=Activated%20Charcoal">Activated Charcoal</a></li><li><a href="shop.html?category=Fertilizers">Fertilizers</a></li></ul></div>
+      <div class="footer-col"><h4>Contact Us</h4><div class="footer-contact-item"><span>📞</span><span>+91 9067555693</span></div><div class="footer-contact-item"><span>✉️</span><span>earthnsol@gmail.com</span></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 EarthNsol. All rights reserved. Made with ♥ for sustainable farming.</p></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+let allProducts = [];
+let filteredProducts = [];
+let currentCategory = 'all';
+let currentSort = 'default';
+let minPrice = 0, maxPrice = Infinity;
+let searchQuery = '';
+
+let activeDealsProductIds = [];
+let rawDeals = [];
+
+async function loadDealsAndProducts() {
+  const c = document.getElementById('products-container');
+  try {
+    const [dealsRes, productsRes] = await Promise.all([
+      window.apiFetch('/api/deals'),
+      window.apiFetch('/api/products?limit=50')
+    ]);
+
+    const deals = dealsRes.data || [];
+    rawDeals = deals;
+    activeDealsProductIds = deals
+      .filter(d => d.active && (!d.expires_at || new Date(d.expires_at) >= new Date()))
+      .map(d => {
+        if (!d.link_url) return null;
+        const match = d.link_url.match(/[?&]id=([^&]+)/);
+        return match ? match[1] : null;
+      })
+      .filter(Boolean);
+
+    const products = productsRes.data || [];
+    const dealProducts = [];
+    const productMap = new Map(products.map(p => [p.id, p]));
+    const usedProductIds = new Set();
+
+    rawDeals.forEach(d => {
+      if (!d.active || (d.expires_at && new Date(d.expires_at) < new Date())) return;
+      if (!d.link_url) return;
+      const match = d.link_url.match(/[?&]id=([^&]+)/);
+      if (match) {
+        const prodId = match[1];
+        const originalProd = productMap.get(prodId);
+        if (originalProd && !usedProductIds.has(prodId)) {
+          usedProductIds.add(prodId);
+          const dealProd = {
+            ...originalProd,
+            name: d.title,
+            images: [d.image_url],
+            immage_url: d.image_url,
+            image_url: d.image_url,
+            isDealProduct: true
+          };
+          dealProducts.push(dealProd);
+        }
+      }
+    });
+
+    allProducts = [...dealProducts, ...products];
+    applyFilters();
+  } catch(err) {
+    if (c) {
+      c.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#c0392b">⚠️ ${err.message}</div>`;
+    }
+  }
+}
+
+async function init() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get('category');
+  if (catParam) {
+    currentCategory = catParam;
+  }
+
+  const authTask = (async () => {
+    try {
+      const user = await window.getSession();
+      if (user) {
+        const el = document.getElementById('welcome-text');
+        if (el) el.textContent = `Welcome, ${user.user_metadata?.full_name || user.email.split('@')[0]}`;
+      }
+    } catch(e) { console.error('Session error:', e); }
+  })();
+
+  const cartTask = (async () => {
+    try { await updateCartBadge(); } catch(e) { console.error('Cart error:', e); }
+  })();
+
+  const productsTask = loadDealsAndProducts();
+
+  await Promise.all([authTask, cartTask, productsTask]);
+
+  if (catParam) {
+    const btns = document.querySelectorAll('.cat-btn');
+    btns.forEach(btn => {
+      if (btn.getAttribute('onclick') && btn.getAttribute('onclick').toLowerCase().includes(`'${catParam.toLowerCase()}'`)) {
+        btns.forEach(b => { if(b.onclick?.toString().includes('filterCategory')) b.classList.remove('active'); });
+        btn.classList.add('active');
+      }
+    });
+  }
+}
+
+function applyFilters() {
+  let result = [...allProducts];
+  if (currentCategory !== 'all') result = result.filter(p => (p.category || '').toLowerCase() === currentCategory.toLowerCase());
+  if (searchQuery) result = result.filter(p => p.name.toLowerCase().includes(searchQuery) || (p.description||'').toLowerCase().includes(searchQuery));
+  result = result.filter(p => p.price >= minPrice && p.price <= maxPrice);
+  if (currentSort === 'price-asc')  result.sort((a,b) => a.price - b.price);
+  if (currentSort === 'price-desc') result.sort((a,b) => b.price - a.price);
+  if (currentSort === 'name')       result.sort((a,b) => a.name.localeCompare(b.name));
+  filteredProducts = result;
+  renderProducts();
+}
+
+function renderProducts() {
+  const c = document.getElementById('products-container');
+  document.getElementById('count').textContent = filteredProducts.length;
+  if (!filteredProducts.length) {
+    c.innerHTML = `<div class="no-results"><p>No products found 🌱</p><button class="btn btn-outline" onclick="resetFilters()">Clear Filters</button></div>`;
+    return;
+  }
+  c.innerHTML = filteredProducts.map((p,i) => productCardHTML(p,i)).join('');
+}
+
+function productCardHTML(p, i=0) {
+  const img = (p.images && Array.isArray(p.images) && p.images[0]) || p.immage_url || p.image_url || 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80';
+  let defaultPrice = Number(p.price);
+  const cat = p.category || 'Natural';
+  const oos = (p.stock !== null && p.stock !== undefined && Number(p.stock) === 0);
+  const safeName = (p.name || 'Unnamed Product').replace(/'/g, "\\'");
+  
+  let pVar = {};
+  if (p.variants) { try { pVar = typeof p.variants === 'string' ? JSON.parse(p.variants) : p.variants; } catch(e) {} }
+  const vKeys = Object.keys(pVar || {});
+  
+  let varHtml = '';
+  if (vKeys.length > 0) {
+    const defaultVar = vKeys[0];
+    defaultPrice = Number(pVar[defaultVar]);
+    window.cardVariantsData[p.id] = { name: defaultVar, price: defaultPrice };
+    
+    const btnHtml = vKeys.map(k => {
+      const isActive = k === defaultVar;
+      const bc = isActive ? 'var(--green)' : 'var(--border)';
+      const bg = isActive ? 'var(--green-pale)' : 'var(--surface)';
+      const co = isActive ? 'var(--green)' : 'var(--ink)';
+      return `<button type="button" onclick="event.stopPropagation(); window.updateCardVariant(this, '${p.id}', '${k.replace(/'/g,"\\'")}', ${pVar[k]})" style="padding:4px 8px; border:2px solid ${bc}; background:${bg}; color:${co}; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all .2s;">${k}</button>`;
+    }).join('');
+    varHtml = `<div class="card-variants" style="display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;">${btnHtml}</div>`;
+  }
+
+  const hasActiveDeal = !!p.isDealProduct;
+  const dealBadge = hasActiveDeal ? '<span class="deal-tag" style="position:absolute;top:10px;left:10px;background:#2ecc71;color:white;font-size:0.75rem;font-weight:700;padding:4px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(46,204,113,0.4);z-index:2;letter-spacing:0.05em;text-transform:uppercase;">🔥 Deal</span>' : '';
+  const dealClass = hasActiveDeal ? 'is-deal' : '';
+
+  return `<div class="product-card ${dealClass}"  onclick="window.location.href='product-detail.html?id=${p.id}'">
+    <div class="card-img">
+      <div class="card-price-top" id="card-price-top-${p.id}">₹${defaultPrice.toLocaleString('en-IN')}</div>
+      <img src="${img}" alt="${p.name || 'Unnamed Product'}" onerror="this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80'">
+      <span class="natural-tag">100% Natural</span>
+      ${dealBadge}
+      ${oos ? '<span class="out-of-stock-tag">Out of Stock</span>' : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-category">${cat}</div>
+      <h3>${p.name || 'Unnamed Product'}</h3>
+      <p class="card-desc">${p.description||''}</p>
+      ${varHtml}
+      <div class="card-footer" style="${varHtml ? 'margin-top:auto;' : ''}">
+        <div class="card-price" id="card-price-${p.id}">₹${defaultPrice.toLocaleString('en-IN')}</div>
+        ${oos
+          ? '<span class="oos-label">Out of Stock</span>'
+          : `<button class="btn-cart" onclick="event.stopPropagation(); window.doCardAddToCart('${p.id}', '${safeName}', this)">Add to Cart</button>`
+        }
+      </div>
+      ${oos ? '' : `<button class="btn-buy-now" onclick="event.stopPropagation(); window.doCardBuyNow('${p.id}', '${safeName}', ${p.price}, this)">⚡ Buy Now</button>`}
+    </div>
+  </div>`;
+}
+
+function filterCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => { if(b.onclick?.toString().includes('filterCategory')) b.classList.remove('active'); });
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function sortProducts(type, btn, prefix='sort') {
+  currentSort = type;
+  const btns = prefix === 'sortbtn'
+    ? document.querySelectorAll('.sort-btn')
+    : document.querySelectorAll('.cat-btn');
+  if (prefix === 'sortbtn') {
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  }
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyPriceFilter() {
+  minPrice = Number(document.getElementById('min-price').value) || 0;
+  maxPrice = Number(document.getElementById('max-price').value) || Infinity;
+  applyFilters();
+}
+
+function searchProducts() {
+  searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+  applyFilters();
+}
+
+function resetFilters() {
+  currentCategory = 'all'; currentSort = 'default'; minPrice = 0; maxPrice = Infinity; searchQuery = '';
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.cat-btn').classList.add('active');
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sortbtn-default').classList.add('active');
+  applyFilters();
+}
+init();
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>

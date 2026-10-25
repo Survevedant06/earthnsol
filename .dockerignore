@@ -1,0 +1,11 @@
+.git
+**/.git
+node_modules
+**/node_modules
+.env
+**/.env
+.env.*
+**/.env.*
+*.zip
+*.tar.gz
+*.rar

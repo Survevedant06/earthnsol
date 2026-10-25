@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>Admin Panel — EarthNsol</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#3a7d44;--green-mid:#4a9955;--green-lite:#52b788;--green-pale:#d8f3dc;
+  --cream:#f0ede6;--ink:#1a2e1d;--muted:#6b8f71;--border:#e0ddd6;
+  --red:#e74c3c;--orange:#e67e22;--blue:#3498db;--shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f5f5f0;color:var(--ink)}
+
+/* ── Login ── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2d5a35,#3a7d44)}
+.login-card{background:white;border-radius:20px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,0.2)}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo img{width:70px;height:70px;border-radius:50%;object-fit:cover;margin:0 auto 12px}
+.login-logo h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--ink)}
+.login-logo p{font-size:0.82rem;color:var(--muted);margin-top:4px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--green)}
+.login-btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--green),var(--green-mid));color:white;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;margin-top:8px}
+.login-btn:hover{opacity:0.9}
+.login-err{color:var(--red);font-size:0.82rem;text-align:center;margin-top:10px;display:none}
+
+/* ── Layout ── */
+.admin-wrap{display:none;min-height:100vh}
+.sidebar{width:240px;background:linear-gradient(180deg,#1a2e1d,#2d5a35);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100}
+.sidebar-logo{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:10px}
+.sidebar-logo img{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.sidebar-logo span{font-family:'Playfair Display',serif;color:white;font-size:1.1rem}
+.sidebar-logo small{display:block;color:rgba(255,255,255,0.5);font-size:0.68rem}
+nav.sidebar-nav{padding:16px 0}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 20px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s;font-size:0.88rem;font-weight:500;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:white}
+.nav-item.active{background:rgba(255,255,255,0.12);color:white;border-left-color:var(--green-lite)}
+.nav-item .icon{font-size:1.1rem;width:22px;text-align:center}
+.nav-section{padding:16px 20px 6px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3)}
+.logout-btn{margin:16px;padding:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:rgba(255,255,255,0.7);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;width:calc(100% - 32px);transition:all .2s}
+.logout-btn:hover{background:rgba(231,76,60,0.2);color:#ff6b6b;border-color:rgba(231,76,60,0.3)}
+
+/* ── Main ── */
+.main{margin-left:240px;padding:28px;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.topbar h1{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--ink)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.admin-badge{background:var(--green-pale);color:var(--green);padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:700}
+
+/* ── Tabs ── */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ── Stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}
+.stat-card{background:white;border-radius:14px;padding:22px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.stat-card .s-icon{font-size:1.8rem;margin-bottom:10px}
+.stat-card .s-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--ink);line-height:1}
+.stat-card .s-label{font-size:0.78rem;color:var(--muted);margin-top:4px;font-weight:500}
+.stat-card .s-sub{font-size:0.72rem;color:var(--green);font-weight:600;margin-top:6px}
+
+/* ── Table ── */
+.card{background:white;border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:24px}
+.card-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head h3{font-size:1rem;font-weight:700;color:var(--ink)}
+.card-head span{font-size:0.78rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th{padding:11px 16px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);background:#fafaf8;border-bottom:1px solid var(--border)}
+td{padding:13px 16px;font-size:0.85rem;border-bottom:1px solid var(--border);color:var(--ink)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafaf8}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700}
+.badge.pending{background:#fff3cd;color:#856404}
+.badge.confirmed{background:#d1ecf1;color:#0c5460}
+.badge.delivered{background:#d4edda;color:#155724}
+.badge.cancelled{background:#f8d7da;color:#721c24}
+.badge.pending_cod{background:#fde8d8;color:#8a3a00}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-green{background:var(--green);color:white}
+.btn-green:hover{background:var(--green-mid)}
+.btn-red{background:#fee2e2;color:var(--red)}
+.btn-red:hover{background:var(--red);color:white}
+.btn-outline{background:white;color:var(--ink);border:1.5px solid var(--border)}
+.btn-outline:hover{border-color:var(--green);color:var(--green)}
+.btn-sm{padding:5px 11px;font-size:0.75rem}
+
+/* ── Product Form ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:22px}
+.form-full{grid-column:1/-1}
+.form-field label{display:block;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:5px}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s}
+.form-field input:focus,.form-field textarea:focus,.form-field select:focus{border-color:var(--green);background:white}
+.form-field textarea{resize:vertical;min-height:80px}
+.form-actions{padding:0 22px 22px;display:flex;gap:10px}
+
+/* ── Search ── */
+.search-bar{display:flex;gap:10px;margin-bottom:18px}
+.search-bar input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;outline:none}
+.search-bar input:focus{border-color:var(--green)}
+
+/* ── Product image preview ── */
+.prod-img{width:44px;height:58px;border-radius:6px;object-fit:contain;background:#f5f5f0;border:1px solid var(--border)}
+
+/* ── Status select ── */
+.status-sel{padding:5px 8px;border:1.5px solid var(--border);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;cursor:pointer;outline:none}
+.status-sel:focus{border-color:var(--green)}
+
+/* ── Image Manager ── */
+.img-manager{display:flex;flex-direction:column;gap:8px}
+.img-add-row{display:flex;gap:8px;align-items:center}
+.img-add-row input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;color:var(--ink);background:var(--cream);outline:none;transition:border-color .2s}
+.img-add-row input:focus{border-color:var(--green);background:white}
+.img-add-row .add-btn{padding:10px 16px;background:var(--green);color:white;border:none;border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .2s}
+.img-add-row .add-btn:hover{background:var(--green-mid)}
+.img-list{display:flex;flex-direction:column;gap:7px}
+.img-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fafaf8;border:1.5px solid var(--border);border-radius:9px;transition:border-color .2s}
+.img-item:hover{border-color:var(--green-lite)}
+.img-item img{width:52px;height:52px;object-fit:cover;border-radius:7px;flex-shrink:0;border:1px solid var(--border);background:#f0f0ea}
+.img-item .img-info{flex:1;min-width:0}
+.img-item .img-url{font-size:0.73rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+.img-item .img-main{display:inline-block;font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green-pale);color:var(--green);margin-top:3px}
+.img-controls{display:flex;align-items:center;gap:3px;flex-shrink:0}
+.ic-btn{background:none;border:1px solid var(--border);cursor:pointer;padding:4px 8px;border-radius:6px;font-size:0.78rem;line-height:1;transition:all .15s;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif}
+.ic-btn:hover{background:var(--cream);border-color:var(--green);color:var(--green)}
+.ic-btn.del:hover{background:#fee2e2;border-color:var(--red);color:var(--red)}
+.ic-btn:disabled{opacity:0.22;cursor:default;pointer-events:none}
+.img-empty-msg{font-size:0.78rem;color:var(--muted);font-style:italic;padding:4px 0}
+.img-hint{font-size:0.71rem;color:var(--muted);margin-top:5px;line-height:1.55}
+.img-hint strong{color:var(--ink)}
+
+/* ── Empty state ── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .e-icon{font-size:3rem;margin-bottom:12px}
+
+/* ── Toast ── */
+.toast{position:fixed;top:24px;right:24px;background:#1a2e1d;color:white;padding:12px 20px;border-radius:10px;font-size:0.85rem;font-weight:600;z-index:9999;transform:translateY(-80px);transition:transform .3s;box-shadow:0 4px 20px rgba(0,0,0,0.2)}
+.toast.show{transform:translateY(0)}
+
+.admin-menu-toggle{display:none}
+
+@media(max-width:900px){
+  .sidebar{width:200px}
+  .main{margin-left:200px;padding:16px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .admin-menu-toggle{display:block !important}
+  .sidebar{
+    position:fixed;top:0;left:0;width:240px;height:100vh;
+    transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index:10005;display:block !important;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(4px);z-index:10000;display:none;opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  .sidebar-overlay.open{display:block;opacity:1}
+  .main{margin-left:0}
+  .stats-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+<script src="theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Loading Screen -->
+<div id="admin-loading-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #f5f5f0; gap: 20px;">
+  <div class="spinner" style="width: 50px; height: 50px; border: 4px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+  <p style="font-weight: 600; color: var(--ink);">Verifying admin session...</p>
+</div>
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<!-- Admin Panel Container -->
+<div id="admin-portal-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+
+function esc(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+let allOrders = [], allProducts = [], allCustomers = [];
+let editingProductId = null;
+
+// ── Toast ─────────────────────────────────────────────
+function toast(msg, color='#1a2e1d') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.background = color;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Safe date formatter to prevent crashes on null/invalid date values
+function safeFormatDate(dateStr) {
+  if (!dateStr) return '—';
+  try {
+    let parsedStr = dateStr;
+    if (!dateStr.includes('Z') && !dateStr.includes('+') && !/-\d{2}:\d{2}$/.test(dateStr)) {
+      parsedStr = dateStr + 'Z';
+    }
+    const d = new Date(parsedStr);
+    if (isNaN(d.getTime())) return '—';
+    return d.toLocaleString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch (e) {
+    return '—';
+  }
+}
+
+// ── Dynamic UI Loader ──────────────────────────────────
+async function loadAdminUI() {
+  if (document.getElementById('admin-wrap')) return true;
+  try {
+    const res = await window.apiFetch('/api/admin/portal-html');
+    if (res && res.html) {
+      document.getElementById('admin-portal-container').innerHTML = res.html;
+      return true;
+    }
+  } catch (err) {
+    console.error('Failed to load admin portal structure:', err);
+  }
+  return false;
+}
+
+
+async function doLogout() {
+  await window.apiFetch('/api/auth/logout', { method: 'POST' }).catch(x => {});
+  localStorage.removeItem('es-session-token');
+  localStorage.removeItem('es-refresh-token');
+  location.reload();
+}
+
+async function loadAll() {
+  const exportDateInput = document.getElementById('export-date');
+  if (exportDateInput) {
+    exportDateInput.value = new Date().toISOString().split('T')[0];
+  }
+  try { await loadDashboard(); } catch(e) { console.error('Dashboard error:', e); }
+  try { await loadOrders(); } catch(e) { console.error('Orders error:', e); }
+  try { await loadProducts(); } catch(e) { console.error('Products error:', e); }
+  try { await loadDeals(); } catch(e) { console.error('Deals error:', e); }
+  try { await loadCustomers(); } catch(e) { console.error('Customers error:', e); }
+  try { await loadAnalytics(); } catch(e) { console.error('Analytics error:', e); }
+  try { await loadScrollingBanner(); } catch(e) { console.error('Banner error:', e); }
+  try { await loadCoupons(); } catch(e) { console.error('Coupons error:', e); }
+  try { await loadCommissions(); } catch(e) { console.error('Commissions error:', e); }
+  try { await loadShippingRules(); } catch(e) { console.error('Shipping error:', e); }
+  try { await loadDelhiverySettings(); } catch(e) { console.error('Delhivery settings error:', e); }
+}
+
+// ── Analytics ─────────────────────────────────────────
+let trendChartInstance = null;
+let bestSellersChartInstance = null;
+let revenueChartInstance = null;
+
+async function loadAnalytics() {
+  try {
+    const res = await window.apiFetch('/api/admin/analytics?t=' + Date.now());
+    const { topProducts, lowDemand, allProductStats, totalRevenue, totalOrders, aov, trendLabels, trendData, lowStockAlerts } = res;
+
+    // Populate Top Stats
+    document.getElementById('an-revenue').textContent = '₹' + Number(totalRevenue || 0).toLocaleString('en-IN');
+    document.getElementById('an-orders').textContent = totalOrders || 0;
+    document.getElementById('an-aov').textContent = '₹' + Number(aov || 0).toLocaleString('en-IN');
+
+    // Populate Low Stock Banner
+    const stockBanner = document.getElementById('low-stock-banner');
+    if (lowStockAlerts && lowStockAlerts.length > 0) {
+      stockBanner.style.display = 'block';
+      document.getElementById('low-stock-list').innerHTML = lowStockAlerts.map(p => 
+        `• ${p.name} — Only ${p.stock} units left!`
+      ).join('<br>');
+    } else {
+      stockBanner.style.display = 'none';
+    }
+
+    // Table Data
+    const tbody = document.getElementById('analytics-products-body');
+    const allTableData = [...topProducts, ...lowDemand];
+    
+    // Sort array uniquely
+    const uniqueMap = new Map();
+    allProductStats.forEach(p => uniqueMap.set(p.id, { ...p, status: 'Active Request' }));
+    lowDemand.forEach(p => uniqueMap.set(p.id, { ...p, status: 'Low Demand' }));
+    
+    const combined = Array.from(uniqueMap.values()).sort((a, b) => b.qty - a.qty);
+
+    if (!combined.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty">No analytics data found</div></td></tr>';
+    } else {
+      tbody.innerHTML = combined.map(p => `<tr>
+        <td><strong>${p.name}</strong></td>
+        <td>${p.qty} units</td>
+        <td>₹${Number(p.revenue || 0).toLocaleString('en-IN')}</td>
+        <td><span class="badge ${p.status === 'Low Demand' ? 'cancelled' : 'confirmed'}">${p.status || 'Active'}</span></td>
+      </tr>`).join('');
+    }
+
+    // Chart Data
+    const labels = topProducts.map(p => p.name);
+    const qtyData = topProducts.map(p => p.qty);
+    const revData = topProducts.map(p => p.revenue);
+
+    // Trend Line Chart
+    const ctx0 = document.getElementById('trendChart').getContext('2d');
+    if (trendChartInstance) trendChartInstance.destroy();
+    trendChartInstance = new Chart(ctx0, {
+      type: 'line',
+      data: {
+        labels: trendLabels,
+        datasets: [{
+          label: 'Revenue (₹)',
+          data: trendData,
+          borderColor: '#3a7d44',
+          backgroundColor: 'rgba(58, 125, 68, 0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx1 = document.getElementById('bestSellersChart').getContext('2d');
+    if (bestSellersChartInstance) bestSellersChartInstance.destroy();
+    bestSellersChartInstance = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Units Sold',
+          data: qtyData,
+          backgroundColor: '#52b788',
+          borderRadius: 4
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    const ctx2 = document.getElementById('revenueChart').getContext('2d');
+    if (revenueChartInstance) revenueChartInstance.destroy();
+    revenueChartInstance = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Revenue (₹)',
+          data: revData,
+          backgroundColor: ['#3a7d44', '#52b788', '#e67e22', '#3498db', '#f1c40f'],
+        }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  } catch (e) {
+    console.error('Analytics Error:', e);
+  }
+}
+
+// ── Dashboard ─────────────────────────────────────────
+async function loadDashboard() {
+  const [ordRes, prodRes] = await Promise.all([
+    window.apiFetch('/api/admin/orders?t=' + Date.now()),
+    window.apiFetch('/api/products?t=' + Date.now()) // products is public
+  ]);
+
+  const orders = ordRes.data || [];
+  const prod = prodRes.data || [];
+  const revenue = orders.reduce((s,o) => s + (Number(o.total_amount)||0), 0);
+  const pending = orders.filter(o => o.order_status === 'pending' || o.order_status === 'pending_cod').length;
+  // Unique customers based on phone number from orders
+  const uniqueCustomersCount = new Set(orders.map(o => o.phone).filter(Boolean)).size;
+
+  document.getElementById('st-orders').textContent = orders.length;
+  document.getElementById('st-orders-sub').textContent = pending + ' pending';
+  document.getElementById('st-revenue').textContent = '₹' + Number(revenue).toLocaleString('en-IN');
+  document.getElementById('st-revenue-sub').textContent = 'from ' + orders.length + ' orders';
+  document.getElementById('st-products').textContent = prod.length;
+  document.getElementById('st-products-sub').textContent = 'in store';
+  document.getElementById('st-customers').textContent = uniqueCustomersCount;
+  document.getElementById('st-customers-sub').textContent = 'Placed orders';
+
+  // Recent orders
+  const recent = orders.slice(0,8);
+  document.getElementById('dash-orders-count').textContent = 'Last ' + recent.length + ' orders';
+  document.getElementById('dash-orders').innerHTML = recent.length ? recent.map(o => `
+    <tr>
+      <td><code style="font-size:0.76rem;color:var(--ink);font-weight:700;background:var(--cream);padding:2px 6px;border-radius:6px">#${o.id.substring(0,6).toUpperCase()}</code></td>
+      <td><strong>${esc(o.full_name||'—')}</strong></td>
+      <td style="font-size:0.78rem;max-width:200px">${esc(o.address||'—')}</td>
+      <td><strong>₹${Number(o.total_amount).toLocaleString('en-IN')}</strong></td>
+      <td><span class="badge ${o.order_status}">${o.order_status}</span></td>
+      <td style="color:var(--muted);font-size:0.78rem">${safeFormatDate(o.created_at)}</td>
+    </tr>`).join('') : '<tr><td colspan="6" class="empty">No orders yet</td></tr>';
+}
+
+// ── Orders Editing & Helpers ──────────────────────────
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Ladakh",
+  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "Andaman & Nicobar", "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Lakshadweep", "Puducherry"
+];
+
+function parseAddressString(address) {
+  if (!address) return null;
+  const pinMatch = address.match(/\b\d{6}\b/);
+  const pinCode = pinMatch ? pinMatch[0] : '';
+  let state = '';
+  for (const st of INDIAN_STATES) {
+    const regex = new RegExp('\\b' + st.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'i');
+    if (regex.test(address)) {
+      state = st;
+      break;
+    }
+  }
+  let clean = address;
+  if (pinCode) clean = clean.replace(pinCode, '');
+  if (state) {
+    const stateRegex = new RegExp('\\b' + state.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'gi');
+    clean = clean.replace(stateRegex, '');
+  }
+  clean = clean.replace(/^[,\s-]+|[,\s-]+$/g, '').trim();
+  const parts = clean.split(',').map(s => s.trim()).filter(Boolean);
+  let city = '';
+  let street = '';
+  if (parts.length > 0) {
+    city = parts[parts.length - 1];
+    street = parts.slice(0, parts.length - 1).join(', ');
+  }
+  return {
+    street: street || clean,
+    city: city || clean,
+    state,
+    pinCode
+  };
+}
+
+let editingOrderId = null;
+
+function editOrderDetails(id) {
+  const o = allOrders.find(x => x.id === id);
+  if (!o) return;
+  editingOrderId = id;
+  
+  // Populate state dropdown if empty
+  const stateSel = document.getElementById('of-state');
+  if (stateSel && stateSel.options.length <= 1) {
+    stateSel.innerHTML = '<option value="">Select State</option>' + 
+      INDIAN_STATES.map(st => `<option value="${st}">${st}</option>`).join('');
+  }
+
+  document.getElementById('order-form-title').textContent = `Edit Order Details (#${id.substring(0,6).toUpperCase()})`;
+  document.getElementById('of-name').value = o.full_name || '';
+  document.getElementById('of-phone').value = o.phone || '';
+  
+  document.getElementById('of-city').value = o.city || '';
+  document.getElementById('of-pin').value = o.pin_code || '';
+  document.getElementById('of-state').value = o.state || '';
+  
+  let street = '';
+  if (o.address) {
+    const parsed = parseAddressString(o.address);
+    if (parsed) {
+      if (!o.city) document.getElementById('of-city').value = parsed.city || '';
+      if (!o.pin_code) document.getElementById('of-pin').value = parsed.pinCode || '';
+      if (!o.state) document.getElementById('of-state').value = parsed.state || '';
+      street = parsed.street || o.address;
+    } else {
+      street = o.address;
+    }
+  }
+  document.getElementById('of-address').value = street;
+
+  document.getElementById('order-form-card').style.display = 'block';
+  document.getElementById('order-form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function closeOrderForm() {
+  document.getElementById('order-form-card').style.display = 'none';
+  editingOrderId = null;
+}
+
+async function saveOrderDetails() {
+  if (!editingOrderId) return;
+  const name = document.getElementById('of-name').value.trim();
+  const phone = document.getElementById('of-phone').value.trim();
+  const street = document.getElementById('of-address').value.trim();
+  const city = document.getElementById('of-city').value.trim();
+  const state = document.getElementById('of-state').value;
+  const pin = document.getElementById('of-pin').value.trim();
+
+  if (!name || !phone || !street || !city || !state || !pin) {
+    toast('⚠️ All fields are required!', '#856404');
+    return;
+  }
+
+  const address = `${street}, ${city}, ${state} - ${pin}`;
+
+  try {
+    toast('💾 Saving changes...', '#0c5460');
+    await window.apiFetch('/api/admin/orders/' + editingOrderId, {
+      method: 'PUT',
+      body: JSON.stringify({
+        full_name: name,
+        phone,
+        address,
+        city,
+        state,
+        pin_code: pin
+      })
+    });
+    toast('✅ Order details saved!', '#155724');
+    closeOrderForm();
+    await loadOrders();
+  } catch (err) {
+    toast('❌ Error saving changes: ' + err.message, '#721c24');
+    console.error(err);
+  }
+}
+
+// ── Orders ────────────────────────────────────────────
+async function loadOrders() {
+  const res = await window.apiFetch('/api/admin/orders?t=' + Date.now());
+  allOrders = res.data || [];
+  document.getElementById('orders-count').textContent = allOrders.length + ' orders';
+  renderOrders(allOrders);
+}
+
+function getLocalDateString(dateStr) {
+  if (!dateStr) return 'Unknown Date';
+  try {
+    let parsedStr = dateStr;
+    if (!dateStr.includes('Z') && !dateStr.includes('+') && !/-\d{2}:\d{2}$/.test(dateStr)) {
+      parsedStr = dateStr + 'Z';
+    }
+    const d = new Date(parsedStr);
+    if (isNaN(d.getTime())) return 'Unknown Date';
+    return d.toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  } catch (e) {
+    return 'Unknown Date';
+  }
+}
+
+function renderOrders(orders) {
+  const tbody = document.getElementById('orders-body');
+  if (!orders.length) { tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="e-icon">📦</div>No orders found</div></td></tr>'; return; }
+  
+  let lastDate = '';
+  let html = '';
+  orders.forEach(o => {
+    const currentDate = getLocalDateString(o.created_at);
+    if (currentDate !== lastDate) {
+      html += `<tr class="date-divider-row">
+        <td colspan="9" style="background:#fafaf8; font-weight:700; color:var(--green); font-size:0.8rem; padding:8px 16px; border-bottom: 2.5px solid var(--border); border-top: 1.5px solid var(--border)">
+          📅 ${currentDate}
+        </td>
+      </tr>`;
+      lastDate = currentDate;
+    }
+    
+    let items = '';
+    try { const p = typeof o.products === 'string' ? JSON.parse(o.products) : o.products; items = Array.isArray(p) ? p.map(i => esc(i.name) + ' ×' + i.quantity).join(', ') : '—'; } catch(e) { items = '—'; }
+    
+    html += `<tr>
+      <td><code style="font-size:0.76rem;color:var(--ink);font-weight:700;background:var(--cream);padding:2px 6px;border-radius:6px">#${o.id.substring(0,6).toUpperCase()}</code></td>
+      <td>
+        <strong>${esc(o.full_name||'—')}</strong>
+        <div style="margin-top:4px"><a href="#" onclick="event.preventDefault(); editOrderDetails('${o.id}')" style="color:var(--green);font-size:0.72rem;font-weight:700;text-decoration:underline;">✏️ Edit Details</a></div>
+      </td>
+      <td>${esc(o.phone||'—')}</td>
+      <td style="font-size:0.78rem;max-width:200px">
+        <div>${esc(o.address||'—')}</div>
+      </td>
+      <td style="font-size:0.75rem;max-width:200px">${items}</td>
+      <td><strong>₹${Number(o.total_amount).toLocaleString('en-IN')}</strong></td>
+      <td>
+        <select class="status-sel" onchange="updateOrderStatus('${o.id}', this.value)">
+          <option value="pending" ${o.order_status==='pending'?'selected':''}>Pending</option>
+          <option value="confirmed" ${o.order_status==='confirmed'?'selected':''}>Confirmed</option>
+          <option value="delivered" ${o.order_status==='delivered'?'selected':''}>Delivered</option>
+          <option value="cancelled" ${o.order_status==='cancelled'?'selected':''}>Cancelled</option>
+        </select>
+      </td>
+      <td>
+        <div class="shipment-cell" id="ship-cell-${o.id}">${renderShipmentCell(o)}</div>
+      </td>
+      <td style="color:var(--muted);font-size:0.76rem">${safeFormatDate(o.created_at)}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+// Builds the per-order Delhivery shipment cell: either a "Create Shipment"
+// button (nothing booked yet) or status + Track/Label/Cancel actions once a
+// shipment exists — replacing the old fully-manual courier/tracking-ID entry
+// with a one-click flow, while still keeping manual entry as a fallback
+// (collapsed by default) for non-Delhivery couriers or edge cases.
+function renderShipmentCell(o) {
+  const statusColors = {
+    created: '#856404', in_transit: '#0c5460', delivered: '#155724',
+    cancelled: '#721c24', failed: '#721c24'
+  };
+  const statusColor = statusColors[o.shipment_status] || 'var(--muted)';
+
+  let top = '';
+  if (o.awb_number) {
+    top = `
+      <div style="font-size:0.72rem;color:${statusColor};font-weight:700;text-transform:capitalize">${o.shipment_status || 'Created'}</div>
+      <div style="font-size:0.72rem;color:var(--muted)">AWB: <a href="https://www.delhivery.com/track/package/${o.awb_number}" target="_blank" style="color:var(--green);font-weight:700;text-decoration:underline;">${o.awb_number}</a></div>
+      ${o.shipment_latest_event ? `<div style="font-size:0.68rem;color:var(--muted);margin-top:2px;"><strong>Event:</strong> ${o.shipment_latest_event}</div>` : ''}
+      ${o.shipment_created_at ? `<div style="font-size:0.68rem;color:var(--muted);margin-top:2px;"><strong>Created:</strong> ${safeFormatDate(o.shipment_created_at)}</div>` : ''}
+      <div style="font-size:0.68rem;color:var(--muted);margin-top:2px;"><strong>Shipping Charge:</strong> ₹${o.shipping_charge || 0}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">
+        <button class="btn btn-outline btn-sm" style="padding:2px 6px;font-size:0.68rem" onclick="refreshTracking('${o.id}')">🔄 Track</button>
+        <button class="btn btn-outline btn-sm" style="padding:2px 6px;font-size:0.68rem" onclick="printLabel('${o.id}')">🖨️ Label</button>
+        <button class="btn btn-outline btn-sm" style="padding:2px 6px;font-size:0.68rem;color:#721c24" onclick="cancelShipment('${o.id}')">❌ Cancel</button>
+      </div>`;
+  } else {
+    top = `
+      <div style="margin-bottom:6px">
+        <button class="btn btn-green btn-sm" style="padding:4px 8px;font-size:0.72rem" onclick="createShipment('${o.id}')">🚀 Create Shipment</button>
+      </div>
+      <div style="font-size:0.68rem;color:var(--muted);"><strong>Shipping Charge:</strong> ₹${o.shipping_charge || 0}</div>
+    `;
+  }
+
+  return `
+    ${top}
+    <details style="margin-top:6px">
+      <summary style="font-size:0.66rem;color:var(--muted);cursor:pointer">Manual override</summary>
+      <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px">
+        <input type="text" placeholder="Courier" class="status-sel" id="courier-${o.id}" value="${o.courier_name || ''}" style="width:110px; font-size:0.75rem; padding:4px 6px;">
+        <input type="text" placeholder="Trak ID" class="status-sel" id="tracking-${o.id}" value="${o.tracking_id || ''}" style="width:110px; font-size:0.75rem; padding:4px 6px;">
+        <button class="btn btn-green btn-sm" onclick="saveOrderTracking('${o.id}')" style="padding:2px 6px; font-size:0.7rem; justify-content:center">Save</button>
+      </div>
+    </details>`;
+}
+
+async function createShipment(orderId) {
+  try {
+    toast('🚀 Creating shipment with Delhivery…', '#0c5460');
+    await window.apiFetch(`/api/admin/orders/${orderId}/create-shipment`, { method: 'POST' });
+    toast('✅ Shipment created!', '#155724');
+    await loadOrders();
+  } catch (e) {
+    // Surface the specific missing-data problems (weight/dims/address) when present.
+    let msg = e.message;
+    if (e.data && e.data.problems) {
+      msg = e.data.problems.join(' • ');
+    } else {
+      try {
+        const parsed = JSON.parse(e.message);
+        if (parsed.problems) msg = parsed.problems.join(' • ');
+      } catch (_) {}
+    }
+    toast('❌ ' + msg, '#721c24');
+    console.error(e);
+  }
+}
+
+async function refreshTracking(orderId) {
+  try {
+    toast('🔄 Refreshing tracking…', '#0c5460');
+    await window.apiFetch(`/api/admin/orders/${orderId}/track-shipment`);
+    toast('✅ Tracking updated!', '#155724');
+    await loadOrders();
+  } catch (e) { toast('❌ ' + e.message, '#721c24'); console.error(e); }
+}
+
+async function printLabel(orderId) {
+  try {
+    const res = await window.apiFetch(`/api/admin/orders/${orderId}/shipping-label`);
+    if (res?.data?.labelUrl) window.open(res.data.labelUrl, '_blank');
+  } catch (e) { toast('❌ ' + e.message, '#721c24'); console.error(e); }
+}
+
+async function cancelShipment(orderId) {
+  if (!confirm('Cancel this Delhivery shipment? This cannot be undone.')) return;
+  try {
+    await window.apiFetch(`/api/admin/orders/${orderId}/cancel-shipment`, { method: 'POST' });
+    toast('✅ Shipment cancelled.', '#155724');
+    await loadOrders();
+  } catch (e) { toast('❌ ' + e.message, '#721c24'); console.error(e); }
+}
+
+async function updateOrderStatus(id, status) {
+  try {
+    await window.apiFetch('/api/admin/orders/' + id, { method: 'PUT', body: JSON.stringify({ order_status: status }) });
+    toast('✅ Order status updated!', '#155724');
+    await loadDashboard();
+    await loadOrders();
+  } catch(error) { toast('❌ Error: ' + error.message, '#721c24'); console.error(error); return; }
+}
+
+async function saveOrderTracking(id) {
+  const courier_name = document.getElementById(`courier-${id}`).value.trim();
+  const tracking_id = document.getElementById(`tracking-${id}`).value.trim();
+  let tracking_url = '';
+
+  if (tracking_id) {
+    const lowerCourier = courier_name.toLowerCase();
+    if (lowerCourier.includes('shiprocket')) {
+      tracking_url = `https://www.shiprocket.in/shipment-tracking/${tracking_id}`;
+    } else if (lowerCourier.includes('delhivery')) {
+      tracking_url = `https://www.delhivery.com/track/package/${tracking_id}`;
+    } else if (lowerCourier.includes('ekart') || lowerCourier.includes('flipkart')) {
+      tracking_url = `https://www.ekartlogistics.com/lookup/${tracking_id}`;
+    } else {
+      // Default standard fallback tracking search link
+      tracking_url = `https://www.google.com/search?q=track+package+${tracking_id}`;
+    }
+  }
+
+  try {
+    await window.apiFetch('/api/admin/orders/' + id, {
+      method: 'PUT',
+      body: JSON.stringify({ courier_name, tracking_id, tracking_url })
+    });
+    toast('✅ Tracking details saved!', '#155724');
+    await loadDashboard();
+    await loadOrders();
+  } catch(error) {
+    toast('❌ Error: ' + error.message, '#721c24');
+    console.error(error);
+  }
+}
+
+function filterOrders() {
+  const q = document.getElementById('order-search').value.toLowerCase();
+  renderOrders(allOrders.filter(o => (o.full_name||'').toLowerCase().includes(q) || o.id.toLowerCase().includes(q)));
+}
+
+// ── Image Manager ─────────────────────────────────────
+let productImages = [];
+
+function renderImgList() {
+  const list = document.getElementById('img-list');
+  if (!list) return;
+  // remove previous rows
+  list.querySelectorAll('.img-item').forEach(el => el.remove());
+  const emptyMsg = document.getElementById('img-empty-msg');
+  if (!productImages.length) {
+    if (emptyMsg) emptyMsg.style.display = 'block';
+    return;
+  }
+  if (emptyMsg) emptyMsg.style.display = 'none';
+  productImages.forEach((url, i) => {
+    const row = document.createElement('div');
+    row.className = 'img-item';
+    row.innerHTML = `
+      <img src="${url}" alt="img${i+1}"
+        onerror="this.style.opacity='0.25';this.style.border='1px solid #e74c3c'">
+      <div class="img-info">
+        <span class="img-url" title="${url}">${url}</span>
+        ${i === 0 ? '<span class="img-main">★ Main Image</span>' : ''}
+      </div>
+      <div class="img-controls">
+        <button class="ic-btn" onclick="imgMove(${i},-1)" ${i===0?'disabled':''} title="Move up">↑</button>
+        <button class="ic-btn" onclick="imgMove(${i}, 1)" ${i===productImages.length-1?'disabled':''} title="Move down">↓</button>
+        ${i>0?`<button class="ic-btn" onclick="imgSetMain(${i})" title="Set as main">Main</button>`:''}
+        <button class="ic-btn del" onclick="imgRemove(${i})" title="Remove">✕</button>
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function addImage() {
+  const inp = document.getElementById('pf-img-input');
+  const url = (inp.value || '').trim();
+  if (!url)                        { toast('⚠️ Paste an image URL first', '#856404'); return; }
+  if (!url.startsWith('http'))     { toast('⚠️ URL must start with http', '#856404'); return; }
+  if (productImages.length >= 6)   { toast('⚠️ Max 6 images allowed', '#856404'); return; }
+  if (productImages.includes(url)) { toast('⚠️ URL already added', '#856404'); return; }
+  productImages.push(url);
+  inp.value = '';
+  renderImgList();
+  toast('✅ Image added!', '#155724');
+}
+
+function imgRemove(i) {
+  productImages.splice(i, 1);
+  renderImgList();
+}
+
+function imgMove(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= productImages.length) return;
+  [productImages[i], productImages[j]] = [productImages[j], productImages[i]];
+  renderImgList();
+}
+
+function imgSetMain(i) {
+  const url = productImages.splice(i, 1)[0];
+  productImages.unshift(url);
+  renderImgList();
+  toast('✅ Main image updated', '#155724');
+}
+
+// ── Variants Manager ──────────────────────────────────
+let productVariants = {};
+
+function renderVarList() {
+  const list = document.getElementById('var-list');
+  if (!list) return;
+  list.querySelectorAll('.img-item').forEach(el => el.remove());
+  const emptyMsg = document.getElementById('var-empty-msg');
+  const keys = Object.keys(productVariants || {});
+  
+  if (!keys.length) {
+    if (emptyMsg) emptyMsg.style.display = 'block';
+    return;
+  }
+  if (emptyMsg) emptyMsg.style.display = 'none';
+  
+  keys.forEach(k => {
+    const row = document.createElement('div');
+    row.className = 'img-item';
+    row.innerHTML = `
+      <div class="img-info" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+        <span style="font-weight:700; font-size:0.85rem;">${k}</span>
+        <span style="color:var(--green); font-weight:700;">₹${productVariants[k]}</span>
+      </div>
+      <div class="img-controls">
+        <button type="button" class="ic-btn del" onclick="varRemove('${k.replace(/'/g, "\\'")}')" title="Remove">✕</button>
+      </div>`;
+    list.appendChild(row);
+  });
+}
+
+function addVariant() {
+  const nInp = document.getElementById('pf-var-name');
+  const pInp = document.getElementById('pf-var-price');
+  const name = nInp.value.trim();
+  const price = Number(pInp.value);
+  if (!name || isNaN(price) || price < 0) { toast('⚠️ Enter a valid size and price', '#856404'); return; }
+  productVariants[name] = price;
+  nInp.value = ''; pInp.value = '';
+  renderVarList();
+  toast('✅ Variant added!', '#155724');
+}
+
+function varRemove(key) {
+  delete productVariants[key];
+  renderVarList();
+}
+
+// ── Products ──────────────────────────────────────────
+async function loadProducts() {
+  const res = await window.apiFetch('/api/products?limit=1000'); // Assuming public fetches top products, might need tweak
+  allProducts = res.data || [];
+  document.getElementById('products-count').textContent = allProducts.length + ' products';
+  renderProducts(allProducts);
+  populateDealProductPicker();
+}
+
+function renderProducts(products) {
+  const tbody = document.getElementById('products-body');
+  if (!products.length) {
+    tbody.innerHTML = '<tr><td colspan="6"><div class="empty"><div class="e-icon">🛍️</div>No products yet</div></td></tr>'; return;
+  }
+  tbody.innerHTML = products.map(p => {
+    const imgs = (p.images && Array.isArray(p.images) && p.images.length)
+      ? p.images : (p.immage_url ? [p.immage_url] : []);
+    const main = imgs[0] || 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100';
+    const extra = imgs.length > 1
+      ? `<span style="font-size:0.68rem;color:var(--muted);display:block;text-align:center;margin-top:2px">+${imgs.length-1} more</span>` : '';
+    return `<tr>
+      <td style="vertical-align:middle">
+        <img class="prod-img" src="${main}" onerror="this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100'">
+        ${extra}
+      </td>
+      <td><strong>${esc(p.name)}</strong></td>
+      <td><span class="badge confirmed">${esc(p.category||'Natural')}</span></td>
+      <td><strong>₹${Number(p.price).toLocaleString('en-IN')}</strong></td>
+      <td>${p.stock !== null && p.stock !== undefined ? p.stock : '—'}</td>
+      <td style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-outline btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteProduct('${p.id}','${p.name.replace(/'/g,"\'")}')">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterProducts(q) {
+  renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q.toLowerCase())));
+}
+
+function toggleCustomCategoryField(val) {
+  const customField = document.getElementById('pf-cat-custom-field');
+  if (customField) {
+    customField.style.display = val === 'Other' ? 'flex' : 'none';
+  }
+}
+
+function openProductForm(reset=true) {
+  if (reset) {
+    editingProductId = null;
+    document.getElementById('prod-form-title').textContent = 'Add New Product';
+    ['pf-name','pf-price','pf-stock','pf-desc','pf-sku','pf-weight','pf-length','pf-width','pf-height','pf-cat-custom'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('pf-img-input').value = '';
+    document.getElementById('pf-cat').value = 'Composts';
+    toggleCustomCategoryField('Composts');
+    productImages = [];
+    productVariants = {};
+    renderImgList();
+    renderVarList();
+  }
+  document.getElementById('product-form-card').style.display = 'block';
+  document.getElementById('product-form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function closeProductForm() {
+  document.getElementById('product-form-card').style.display = 'none';
+  editingProductId = null;
+  productImages = [];
+  productVariants = {};
+}
+
+function editProduct(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  editingProductId = id;
+  document.getElementById('prod-form-title').textContent = 'Edit Product';
+  document.getElementById('pf-name').value  = p.name        || '';
+  document.getElementById('pf-price').value = p.price       || '';
+  document.getElementById('pf-stock').value = p.stock !== null ? p.stock : '';
+  document.getElementById('pf-desc').value  = p.description || '';
+  
+  const standardCats = ['Composts', 'Soil Amendments', 'Fertilizers', 'Pesticides', 'Liquid Sprays'];
+  const catVal = p.category || 'Composts';
+  if (standardCats.includes(catVal)) {
+    document.getElementById('pf-cat').value = catVal;
+    toggleCustomCategoryField(catVal);
+    document.getElementById('pf-cat-custom').value = '';
+  } else {
+    document.getElementById('pf-cat').value = 'Other';
+    toggleCustomCategoryField('Other');
+    document.getElementById('pf-cat-custom').value = catVal;
+  }
+  
+  document.getElementById('pf-sku').value    = p.sku        || '';
+  document.getElementById('pf-weight').value = p.weight_kg  ?? '';
+  document.getElementById('pf-length').value = p.length_cm  ?? '';
+  document.getElementById('pf-width').value  = p.width_cm   ?? '';
+  document.getElementById('pf-height').value = p.height_cm  ?? '';
+  document.getElementById('pf-img-input').value = '';
+  // load existing images — support old single-URL products
+  if (p.images && Array.isArray(p.images) && p.images.length) {
+    productImages = [...p.images];
+  } else if (p.immage_url) {
+    productImages = [p.immage_url];
+  } else {
+    productImages = [];
+  }
+  
+  let pVar = {};
+  try { pVar = typeof p.variants === 'string' ? JSON.parse(p.variants) : (p.variants || {}); } catch(e) {}
+  productVariants = { ...pVar };
+  
+  renderImgList();
+  renderVarList();
+  openProductForm(false);
+}
+
+async function saveProduct() {
+  const name  = document.getElementById('pf-name').value.trim();
+  const price = document.getElementById('pf-price').value.trim();
+  if (!name || !price) { toast('⚠️ Name and price are required!', '#856404'); return; }
+  if (!productImages.length) { toast('⚠️ Add at least one image!', '#856404'); return; }
+  
+  let category = document.getElementById('pf-cat').value;
+  if (category === 'Other') {
+    category = document.getElementById('pf-cat-custom').value.trim();
+    if (!category) {
+      toast('⚠️ Please specify the custom category name!', '#856404');
+      return;
+    }
+  }
+
+  const payload = {
+    name,
+    description: document.getElementById('pf-desc').value.trim(),
+    price:       Number(price),
+    stock:       Number(document.getElementById('pf-stock').value) || 0,
+    category,
+    images:      productImages,           // new column: text[] array
+    immage_url:  productImages[0] || '',  // keep legacy column in sync
+    variants:    productVariants,         // json column
+    sku:         document.getElementById('pf-sku').value.trim() || null,
+    weight_kg:   document.getElementById('pf-weight').value ? Number(document.getElementById('pf-weight').value) : null,
+    length_cm:   document.getElementById('pf-length').value ? Number(document.getElementById('pf-length').value) : null,
+    width_cm:    document.getElementById('pf-width').value  ? Number(document.getElementById('pf-width').value)  : null,
+    height_cm:   document.getElementById('pf-height').value ? Number(document.getElementById('pf-height').value) : null
+  };
+  if (editingProductId) {
+    try {
+      await window.apiFetch('/api/admin/products/' + editingProductId, { method: 'PUT', body: JSON.stringify(payload) });
+      toast('✅ Product updated!', '#155724');
+    } catch(error) { toast('❌ ' + error.message, '#721c24'); console.error(error); return; }
+  } else {
+    try {
+      await window.apiFetch('/api/admin/products', { method: 'POST', body: JSON.stringify(payload) });
+      toast('✅ Product added!', '#155724');
+    } catch(error) { toast('❌ ' + error.message, '#721c24'); console.error(error); return; }
+  }
+  closeProductForm();
+  await loadProducts();
+  await loadDashboard();
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm('Delete "' + name + '"? This cannot be undone!')) return;
+  try {
+    await window.apiFetch('/api/admin/products/' + id, { method: 'DELETE' });
+    toast('🗑️ Product deleted!', '#721c24');
+    await loadProducts();
+    await loadDashboard();
+  } catch(e) { toast('❌ Error: ' + e.message, '#721c24'); }
+}
+
+// ── Deals ─────────────────────────────────────────────
+let allDeals = [];
+let editingDealId = null;
+
+async function loadDeals() {
+  try {
+    const res = await window.apiFetch('/api/admin/deals');
+    allDeals = res.data || [];
+  } catch(e) { allDeals = []; }
+  const countSpan = document.getElementById('deals-count');
+  if(countSpan) countSpan.textContent = allDeals.length + ' deals';
+  renderDeals(allDeals);
+}
+
+function renderDeals(deals) {
+  const tbody = document.getElementById('deals-body');
+  if (!tbody) return;
+  if (!deals.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty"><div class="e-icon">🎟️</div>No deals found</div></td></tr>'; return;
+  }
+  tbody.innerHTML = deals.map(d => {
+    let typeBadge = `<span class="badge confirmed" style="background:#e8f5e9;color:#2e7d32">Carousel</span>`;
+    if (d.is_marquee) {
+      typeBadge = `<span class="badge confirmed" style="background:#e0f2f1;color:#00695c">Scrolling Header</span>`;
+    }
+    
+    let expiresText = 'Never';
+    if (d.expires_at) {
+      const expDate = new Date(d.expires_at);
+      if (expDate < new Date()) {
+        expiresText = `<span style="color:var(--red);font-weight:700">Expired</span>`;
+      } else {
+        const diffMs = expDate - new Date();
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        expiresText = `${diffDays} days left`;
+      }
+    }
+    
+    return `<tr>
+      <td style="vertical-align:middle"><img class="prod-img" src="${d.image_url}" onerror="this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100'"></td>
+      <td><strong>${d.title}</strong></td>
+      <td><a href="${d.link_url||'#'}" target="_blank" style="color:var(--green);font-size:0.75rem">${d.link_url||'—'}</a></td>
+      <td>${typeBadge}</td>
+      <td><small style="font-weight:600">${expiresText}</small></td>
+      <td><span class="badge ${d.active?'confirmed':'cancelled'}">${d.active?'Active':'Draft'}</span></td>
+      <td style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-outline btn-sm" onclick="editDeal('${d.id}')">✏️ Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteDeal('${d.id}','${(d.title||'').replace(/'/g,"\\'")} ')">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterDeals(q) {
+  renderDeals(allDeals.filter(d => (d.title||'').toLowerCase().includes(q.toLowerCase())));
+}
+
+function openDealForm(reset=true) {
+  if (reset) {
+    editingDealId = null;
+    document.getElementById('deal-form-title').textContent = 'Add New Deal';
+    document.getElementById('df-title').value = '';
+    document.getElementById('df-link').value = '';
+    document.getElementById('df-img').value = '';
+    document.getElementById('df-img-preview').src = 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=150';
+    document.getElementById('df-active').value = 'true';
+    document.getElementById('df-is-marquee').value = 'false';
+    document.getElementById('df-days').value = '';
+    const picker = document.getElementById('df-product-picker');
+    if (picker) picker.value = '';
+  }
+  populateDealProductPicker();
+  document.getElementById('deal-form-card').style.display = 'block';
+  document.getElementById('deal-form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// Fills the "Link to Product" dropdown from the products already loaded for
+// the Products tab, so it's always in sync with what's actually live.
+function populateDealProductPicker() {
+  const sel = document.getElementById('df-product-picker');
+  if (!sel) return;
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Not linked to a specific product (custom banner) —</option>' +
+    allProducts.map(p => {
+      const label = (p.name || 'Unnamed product').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `<option value="${p.id}">${label}</option>`;
+    }).join('');
+  sel.value = current;
+}
+
+// Auto-fills Link URL + Image from the selected product's real, current data —
+// this is what stops deals from silently breaking due to stale/typed-in IDs.
+function applyDealProduct(productId) {
+  if (!productId) return;
+  const p = allProducts.find(x => x.id === productId);
+  if (!p) return;
+  document.getElementById('df-link').value = `product-detail.html?id=${p.id}`;
+  const img = (p.images && Array.isArray(p.images) && p.images[0]) || p.immage_url || p.image_url || '';
+  if (img) {
+    document.getElementById('df-img').value = img;
+    document.getElementById('df-img-preview').src = img;
+  }
+  const titleField = document.getElementById('df-title');
+  if (!titleField.value.trim()) titleField.value = `Deal on ${p.name || 'this product'}`;
+}
+
+function closeDealForm() {
+  document.getElementById('deal-form-card').style.display = 'none';
+  editingDealId = null;
+}
+
+function editDeal(id) {
+  const d = allDeals.find(x => x.id === id);
+  if (!d) return;
+  editingDealId = id;
+  document.getElementById('deal-form-title').textContent = 'Edit Deal';
+  document.getElementById('df-title').value = d.title || '';
+  document.getElementById('df-link').value = d.link_url || '';
+  document.getElementById('df-img').value = d.image_url || '';
+  document.getElementById('df-img-preview').src = d.image_url || 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=150';
+  document.getElementById('df-active').value = d.active ? 'true' : 'false';
+  document.getElementById('df-is-marquee').value = d.is_marquee ? 'true' : 'false';
+
+  populateDealProductPicker();
+  const picker = document.getElementById('df-product-picker');
+  if (picker) {
+    const match = (d.link_url || '').match(/[?&]id=([^&]+)/);
+    picker.value = (match && allProducts.some(p => p.id === match[1])) ? match[1] : '';
+  }
+  
+  if (d.expires_at) {
+    const diffMs = new Date(d.expires_at) - new Date();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    document.getElementById('df-days').value = diffDays > 0 ? diffDays : '';
+  } else {
+    document.getElementById('df-days').value = '';
+  }
+  openDealForm(false);
+}
+
+async function saveDeal() {
+  const title = document.getElementById('df-title').value.trim();
+  const imgUrl = document.getElementById('df-img').value.trim();
+  if (!title || !imgUrl) { toast('⚠️ Title and image URL are required!', '#856404'); return; }
+  
+  const daysVal = document.getElementById('df-days').value.trim();
+  let expires_at = null;
+  if (daysVal) {
+    const days = parseInt(daysVal);
+    if (!isNaN(days) && days > 0) {
+      const now = new Date();
+      now.setDate(now.getDate() + days);
+      expires_at = now.toISOString();
+    }
+  }
+  
+  const payload = {
+    title,
+    image_url: imgUrl,
+    link_url: document.getElementById('df-link').value.trim(),
+    active: document.getElementById('df-active').value === 'true',
+    is_marquee: document.getElementById('df-is-marquee').value === 'true',
+    expires_at: expires_at
+  };
+  
+  if (editingDealId) {
+    try {
+      await window.apiFetch('/api/admin/deals/' + editingDealId, { method: 'PUT', body: JSON.stringify(payload) });
+      toast('✅ Deal updated!', '#155724');
+    } catch(error) { toast('❌ ' + error.message, '#721c24'); console.error(error); return; }
+  } else {
+    try {
+      await window.apiFetch('/api/admin/deals', { method: 'POST', body: JSON.stringify(payload) });
+      toast('✅ Deal added!', '#155724');
+    } catch(error) { toast('❌ ' + error.message, '#721c24'); console.error(error); return; }
+  }
+  closeDealForm();
+  await loadDeals();
+}
+
+async function deleteDeal(id, title) {
+  if (!confirm('Delete deal "' + title + '"?')) return;
+  try {
+    await window.apiFetch('/api/admin/deals/' + id, { method: 'DELETE' });
+    toast('🗑️ Deal deleted!', '#721c24');
+    await loadDeals();
+  } catch(e) { toast('❌ Error: ' + e.message, '#721c24'); }
+}
+
+async function loadScrollingBanner() {
+  try {
+    const res = await window.apiFetch('/api/announcement');
+    document.getElementById('sb-text').value = res.text || '';
+  } catch(e) { console.error('Failed to load scrolling banner:', e); }
+}
+
+async function saveScrollingBanner() {
+  const text = document.getElementById('sb-text').value.trim();
+  try {
+    await window.apiFetch('/api/admin/announcement', {
+      method: 'POST',
+      body: JSON.stringify({ text })
+    });
+    toast('✅ Scrolling banner updated!', '#155724');
+  } catch(e) {
+    toast('❌ Failed to update banner: ' + e.message, '#721c24');
+  }
+}
+
+// ── Customers ─────────────────────────────────────────
+async function loadCustomers() {
+  let orders = [];
+  try {
+    const res = await window.apiFetch('/api/admin/orders?t=' + Date.now());
+    orders = res.data || [];
+  } catch(e) {}
+  
+  const custMap = {};
+  orders.forEach(o => {
+    if (!o.phone) return;
+    if (!custMap[o.phone]) {
+      custMap[o.phone] = { phone: o.phone, name: o.full_name, address: o.address, orders: 0, latest: o.created_at };
+    }
+    custMap[o.phone].orders++;
+  });
+  
+  allCustomers = Object.values(custMap);
+  document.getElementById('customers-count').textContent = allCustomers.length + ' customers';
+  renderCustomers(allCustomers);
+}
+
+function renderCustomers(customers) {
+  const tbody = document.getElementById('customers-body');
+  if (!customers.length) { tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><div class="e-icon">👥</div>No customers found</div></td></tr>'; return; }
+  tbody.innerHTML = customers.map(c => `
+    <tr>
+      <td><strong>${esc(c.name||'—')}</strong></td>
+      <td>${esc(c.phone||'—')}</td>
+      <td style="font-size:0.78rem;max-width:240px">${esc(c.address||'—')}</td>
+      <td><span class="badge confirmed">${c.orders} orders</span></td>
+      <td style="color:var(--muted);font-size:0.78rem">${new Date(c.latest).toLocaleDateString('en-IN')}</td>
+    </tr>`).join('');
+}
+
+function filterCustomers() {
+  const q = document.getElementById('cust-search').value.toLowerCase();
+  renderCustomers(allCustomers.filter(c => (c.name||'').toLowerCase().includes(q) || (c.phone||'').toLowerCase().includes(q)));
+}
+
+// ── Mobile Sidebar Drawer ─────────────────────────────
+function toggleAdminSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar && overlay) {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  }
+}
+
+// ── Tab switching ─────────────────────────────────────
+function showTab(tab, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  el.classList.add('active');
+  const titles = {dashboard:'Dashboard',analytics:'Analytics',orders:'Orders',products:'Products',deals:'Deals',customers:'Customers',influencers:'Influencer Marketing'};
+  document.getElementById('page-title').textContent = titles[tab] || 'Admin';
+
+  // Close mobile sidebar/overlay if open
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar && sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+  }
+  if (overlay && overlay.classList.contains('open')) {
+    overlay.classList.remove('open');
+  }
+}
+
+// ── Influencers & Coupons ─────────────────────────────
+let editingCouponCode = null;
+let allCoupons = [];
+let allCommissions = [];
+
+function showInfluencerSubSection(section) {
+  const coupSec = document.getElementById('inf-coupons-sec');
+  const commSec = document.getElementById('inf-commissions-sec');
+  const btnCoupons = document.getElementById('inf-btn-coupons');
+  const btnCommissions = document.getElementById('inf-btn-commissions');
+  if (section === 'coupons') {
+    coupSec.style.display = 'block';
+    commSec.style.display = 'none';
+    btnCoupons.className = 'btn btn-green';
+    btnCommissions.className = 'btn btn-outline';
+  } else {
+    coupSec.style.display = 'none';
+    commSec.style.display = 'block';
+    btnCoupons.className = 'btn btn-outline';
+    btnCommissions.className = 'btn btn-green';
+  }
+}
+
+function openCouponForm(reset=true) {
+  if (reset) {
+    editingCouponCode = null;
+    document.getElementById('coupon-form-title').textContent = 'Create Influencer Coupon';
+    document.getElementById('cp-code').value = '';
+    document.getElementById('cp-code').disabled = false;
+    document.getElementById('cp-name').value = '';
+    document.getElementById('cp-discount').value = '10';
+    document.getElementById('cp-commission').value = '10';
+    document.getElementById('cp-email').value = '';
+    document.getElementById('cp-active').value = 'true';
+  }
+  document.getElementById('coupon-form-card').style.display = 'block';
+  document.getElementById('coupon-form-card').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function closeCouponForm() {
+  document.getElementById('coupon-form-card').style.display = 'none';
+  editingCouponCode = null;
+}
+
+async function loadCoupons() {
+  try {
+    const res = await window.apiFetch('/api/admin/coupons');
+    allCoupons = res.data || [];
+  } catch(e) { allCoupons = []; }
+  document.getElementById('coupons-count').textContent = allCoupons.length + ' coupons';
+  renderCoupons(allCoupons);
+}
+
+function renderCoupons(coupons) {
+  const tbody = document.getElementById('coupons-body');
+  if (!tbody) return;
+  if (!coupons.length) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty"><div class="e-icon">🎫</div>No coupons found</div></td></tr>'; return;
+  }
+  tbody.innerHTML = coupons.map(c => {
+    const refUrl = `${window.location.origin}/shop.html?ref=${c.code}`;
+    return `<tr>
+      <td><code style="font-weight:700;color:var(--green)">${c.code}</code></td>
+      <td><strong>${c.influencer_name}</strong></td>
+      <td>${c.influencer_email || '—'}</td>
+      <td>${c.discount_percent}%</td>
+      <td>${c.commission_percent}%</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <a href="${refUrl}" target="_blank" style="color:var(--green);font-size:0.75rem;word-break:break-all">${refUrl}</a>
+          <button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('${refUrl}');toast('📋 Copied link!','#155724')" style="padding:2px 6px">Copy</button>
+        </div>
+      </td>
+      <td><span class="badge ${c.active?'confirmed':'cancelled'}">${c.active?'Active':'Inactive'}</span></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-outline btn-sm" onclick="editCoupon('${c.code}')">✏️</button>
+          <button class="btn btn-red btn-sm" onclick="deleteCoupon('${c.code}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterCoupons(q) {
+  const cleanQ = q.toLowerCase();
+  renderCoupons(allCoupons.filter(c => c.code.toLowerCase().includes(cleanQ) || c.influencer_name.toLowerCase().includes(cleanQ)));
+}
+
+function editCoupon(code) {
+  const c = allCoupons.find(x => x.code === code);
+  if (!c) return;
+  editingCouponCode = code;
+  document.getElementById('coupon-form-title').textContent = 'Edit Influencer Coupon';
+  document.getElementById('cp-code').value = c.code;
+  document.getElementById('cp-code').disabled = true;
+  document.getElementById('cp-name').value = c.influencer_name || '';
+  document.getElementById('cp-discount').value = c.discount_percent || 0;
+  document.getElementById('cp-commission').value = c.commission_percent || 0;
+  document.getElementById('cp-email').value = c.influencer_email || '';
+  document.getElementById('cp-active').value = c.active ? 'true' : 'false';
+  openCouponForm(false);
+}
+
+async function saveCoupon() {
+  const code = document.getElementById('cp-code').value.trim().toUpperCase();
+  const name = document.getElementById('cp-name').value.trim();
+  const discount = document.getElementById('cp-discount').value.trim();
+  const commission = document.getElementById('cp-commission').value.trim();
+  const email = document.getElementById('cp-email').value.trim();
+  const active = document.getElementById('cp-active').value === 'true';
+
+  if (!code || !name || discount === '' || commission === '') {
+    toast('⚠️ Code, influencer name, discount and commission are required!', '#856404');
+    return;
+  }
+
+  const payload = {
+    code,
+    influencer_name: name,
+    influencer_email: email,
+    discount_percent: Number(discount),
+    commission_percent: Number(commission),
+    active
+  };
+
+  try {
+    if (editingCouponCode) {
+      await window.apiFetch('/api/admin/coupons/' + editingCouponCode, { method: 'PUT', body: JSON.stringify(payload) });
+      toast('✅ Coupon updated successfully!', '#155724');
+    } else {
+      await window.apiFetch('/api/admin/coupons', { method: 'POST', body: JSON.stringify(payload) });
+      toast('✅ Coupon created successfully!', '#155724');
+    }
+    closeCouponForm();
+    await loadCoupons();
+  } catch (err) {
+    toast('❌ Error: ' + err.message, '#721c24');
+  }
+}
+
+async function deleteCoupon(code) {
+  if (!confirm(`Are you sure you want to delete coupon code "${code}"?`)) return;
+  try {
+    await window.apiFetch('/api/admin/coupons/' + code, { method: 'DELETE' });
+    toast('🗑️ Coupon deleted!', '#721c24');
+    await loadCoupons();
+  } catch (err) {
+    toast('❌ Error: ' + err.message, '#721c24');
+  }
+}
+
+async function loadCommissions() {
+  try {
+    const res = await window.apiFetch('/api/admin/commissions');
+    allCommissions = res.data || [];
+  } catch(e) { allCommissions = []; }
+  document.getElementById('commissions-count').textContent = allCommissions.length + ' records';
+  renderCommissions(allCommissions);
+}
+
+function renderCommissions(commissions) {
+  const tbody = document.getElementById('commissions-body');
+  if (!tbody) return;
+  if (!commissions.length) {
+    tbody.innerHTML = '<tr><td colspan="8"><div class="empty"><div class="e-icon">💰</div>No commissions recorded yet</div></td></tr>'; return;
+  }
+  tbody.innerHTML = commissions.map(c => {
+    const orderUser = c.orders ? `${c.orders.full_name || '—'} (${c.orders.phone || '—'})` : '—';
+    return `<tr>
+      <td>${safeFormatDate(c.created_at)}</td>
+      <td><strong>${c.influencer_name}</strong></td>
+      <td><code style="font-weight:700;color:var(--green)">${c.coupon_code || '—'}</code></td>
+      <td style="font-size:0.78rem">${orderUser}</td>
+      <td>₹${Number(c.order_amount).toLocaleString('en-IN')}</td>
+      <td style="font-weight:700;color:var(--green)">₹${Number(c.commission_amount).toLocaleString('en-IN')}</td>
+      <td><span class="badge ${c.status==='paid'?'confirmed':'pending'}">${c.status==='paid'?'Paid':'Unpaid'}</span></td>
+      <td>
+        <button class="btn ${c.status==='paid'?'btn-outline':'btn-green'} btn-sm" onclick="toggleCommissionStatus('${c.id}', '${c.status}')">
+          ${c.status==='paid'?'Mark Unpaid':'Mark Paid'}
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function toggleCommissionStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'paid' ? 'unpaid' : 'paid';
+  try {
+    await window.apiFetch('/api/admin/commissions/' + id, {
+      method: 'PUT',
+      body: JSON.stringify({ status: newStatus })
+    });
+    toast('✅ Commission status updated!', '#155724');
+    await loadCommissions();
+  } catch (err) {
+    toast('❌ Error: ' + err.message, '#721c24');
+  }
+}
+
+// ── Shipping rules management & CSV export ─────────────────────────────
+let allShippingRules = [];
+
+async function loadShippingRules() {
+  try {
+    const res = await window.apiFetch('/api/admin/shipping-rules');
+    allShippingRules = res.data || [];
+    renderShippingRules(allShippingRules);
+  } catch (err) {
+    console.error("Failed to load shipping rules:", err);
+  }
+}
+
+function renderShippingRules(rules) {
+  const tbody = document.getElementById('shipping-rules-body');
+  if (!tbody) return;
+  if (!rules || !rules.length) {
+    tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><div class="e-icon">🚚</div>No shipping rules configured</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = rules.map(r => {
+    return `<tr>
+      <td><strong>${r.zone_name}</strong></td>
+      <td><code>${r.id}</code></td>
+      <td>
+        <input type="number" id="ship-price-${r.id}" value="${r.price}" style="width: 100px; padding: 6px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-family: inherit; font-weight: 600;" />
+      </td>
+      <td>
+        <button class="btn btn-green btn-sm" onclick="saveShippingRule('${r.id}')">💾 Save</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function saveShippingRule(id) {
+  const priceInput = document.getElementById(`ship-price-${id}`);
+  if (!priceInput) return;
+  const price = Number(priceInput.value);
+  if (isNaN(price) || price < 0) {
+    toast('⚠️ Price must be a valid positive number', '#856404');
+    return;
+  }
+  try {
+    await window.apiFetch(`/api/admin/shipping-rules/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ price })
+    });
+    toast('✅ Shipping zone price updated!', '#155724');
+    await loadShippingRules();
+  } catch (err) {
+    toast('❌ Update failed: ' + err.message, '#721c24');
+  }
+}
+
+async function loadDelhiverySettings() {
+  try {
+    const res = await window.apiFetch('/api/admin/settings');
+    const toggle = document.getElementById('delhivery-autoship-toggle');
+    if (toggle && res && res.settings) {
+      toggle.checked = !!res.settings.autoShipOnPayment;
+    }
+  } catch (err) {
+    console.error("Failed to load Delhivery settings:", err);
+  }
+}
+
+function bindDelhiverySettings() {
+  const toggle = document.getElementById('delhivery-autoship-toggle');
+  if (!toggle) return;
+  toggle.onchange = async function() {
+    const autoShipOnPayment = toggle.checked;
+    try {
+      await window.apiFetch('/api/admin/settings', {
+        method: 'PUT',
+        body: JSON.stringify({ autoShipOnPayment })
+      });
+      toast('✅ Delhivery automation settings updated!', '#155724');
+    } catch (err) {
+      toast('❌ Failed to update settings: ' + err.message, '#721c24');
+      toggle.checked = !autoShipOnPayment;
+    }
+  };
+}
+
+async function exportDailyOrdersCSV() {
+  try {
+    const isAll = document.getElementById('export-all').checked;
+    const selectedDate = document.getElementById('export-date').value;
+    
+    let url = `${CONFIG.BACKEND_URL}/api/admin/orders/export-csv`;
+    if (isAll) {
+      url += '?all=true';
+    } else if (selectedDate) {
+      url += `?date=${selectedDate}`;
+    }
+
+    toast('⏳ Generating CSV...', '#2980b9');
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('es-session-token')}`
+      }
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'Failed to download CSV');
+    }
+    const blob = await res.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = downloadUrl;
+    
+    const fileSuffix = isAll ? 'all-time' : (selectedDate || new Date().toISOString().split('T')[0]);
+    a.download = `earthnsol-orders-${fileSuffix}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(downloadUrl);
+    toast('✅ CSV downloaded successfully!', '#155724');
+  } catch (err) {
+    toast('❌ Export failed: ' + err.message, '#721c24');
+  }
+}
+
+// ── Check session on load ─────────────────────────────
+window.addEventListener('load', async () => {
+  const token = localStorage.getItem('es-session-token');
+  if (!token) {
+    window.location.href = 'login.html?redirect=admin';
+    return;
+  }
+  
+  try {
+    const loaded = await loadAdminUI();
+    if (loaded) {
+      const loadingScreen = document.getElementById('admin-loading-screen');
+      if (loadingScreen) loadingScreen.style.display = 'none';
+      
+      const emailBadge = document.getElementById('admin-email-badge');
+      if (emailBadge) emailBadge.textContent = 'Admin';
+      
+      const adminWrap = document.getElementById('admin-wrap');
+      if (adminWrap) adminWrap.style.display = 'flex';
+      
+      loadAll();
+      bindDelhiverySettings();
+    } else {
+      localStorage.removeItem('es-session-token');
+      localStorage.removeItem('es-refresh-token');
+      window.location.href = 'login.html?redirect=admin';
+    }
+  } catch (e) {
+    localStorage.removeItem('es-session-token');
+    localStorage.removeItem('es-refresh-token');
+    window.location.href = 'login.html?redirect=admin';
+  }
+});
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>

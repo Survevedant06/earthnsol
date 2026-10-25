@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('es-theme')||'light');</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<title>My Profile — EarthNsol</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.profile-sec { padding: 56px 0 80px; min-height: 60vh; }
+.profile-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg); max-width: 600px; margin: 0 auto; padding: 40px; box-shadow: var(--shadow-md); }
+.profile-card h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--ink); margin-bottom: 8px; text-align: center; }
+.profile-desc { text-align: center; color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+.p-field { margin-bottom: 20px; }
+.p-field label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px; }
+.p-field input, .p-field textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 9px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; color: var(--ink); background: var(--surface); outline: none; transition: all .2s; }
+.p-field input:focus, .p-field textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-glow); background: var(--bg-card); }
+.p-field input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.p-msg { padding: 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; display: none; text-align: center; }
+.p-msg.ok { background: var(--green-pale); color: var(--green); border: 1px solid var(--green); display: block; }
+.p-msg.err { background: #fef0f0; color: #c0392b; border: 1px solid #f5c6c6; display: block; }
+
+.btn-save { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--green), var(--green-mid)); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all .25s; }
+.btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(58,125,68,0.3); }
+</style>
+<script src="theme.js"></script>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" class="es-logo-img" alt="EarthNsol">
+        <div class="logo-text"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.getElementById('main-nav').classList.toggle('open')">☰</button>
+      <nav id="main-nav"><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="profile.html" style="color:var(--green)">My Profile</a></li>
+      </ul></nav>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+        <span class="welcome-text" id="welcome-text">Welcome, Guest</span>
+        <button class="nav-btn nav-btn-cart" onclick="window.location.href='cart.html'" title="Cart">🛒 <span class="nav-btn-text">Cart</span> <span class="cart-badge" id="cart-count" style="display:flex">0</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div style="background:white;border-bottom:1px solid var(--border);padding:11px 0">
+  <div class="container" style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--muted)">
+    <a href="index.html" style="color:var(--muted)">Home</a><span>›</span>
+    <span style="color:var(--green);font-weight:600">My Profile</span>
+  </div>
+</div>
+
+<section class="profile-sec">
+  <div class="container">
+    <div class="profile-card">
+      <h1>👤 My Profile</h1>
+      <p class="profile-desc">Save your delivery details for a faster checkout experience.</p>
+      
+      <div id="p-msg" class="p-msg"></div>
+
+      <div class="p-field">
+        <label>Full Name</label>
+        <input type="text" id="prof-name" disabled>
+      </div>
+      <div class="p-field">
+        <label>Email Address</label>
+        <input type="email" id="prof-email" disabled>
+      </div>
+
+      <h3 style="margin:24px 0 16px; font-size:1.1rem; color:var(--ink); border-bottom:1px solid var(--border); padding-bottom:8px;">Shipping Details</h3>
+
+      <div class="p-field">
+        <label>Phone Number *</label>
+        <input type="text" id="prof-phone" placeholder="e.g. +91 9067555693">
+      </div>
+      <div class="p-field">
+        <label>Street Address *</label>
+        <input type="text" id="prof-street" placeholder="House/Flat No, Apartment, Street Name">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+        <div class="p-field" style="margin-bottom: 0;">
+          <label>City / District *</label>
+          <input type="text" id="prof-city" placeholder="e.g. Ratnagiri">
+        </div>
+        <div class="p-field" style="margin-bottom: 0;">
+          <label>PIN Code *</label>
+          <input type="text" id="prof-pin" placeholder="6-digit PIN" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'')">
+        </div>
+      </div>
+      <div class="p-field">
+        <label>State *</label>
+        <select id="prof-state" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;color:var(--ink);background:var(--surface);outline:none;transition:all .2s;">
+          <option value="">Select State</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Chhattisgarh">Chhattisgarh</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Goa">Goa</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Haryana">Haryana</option>
+          <option value="Himachal Pradesh">Himachal Pradesh</option>
+          <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+          <option value="Jharkhand">Jharkhand</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Ladakh">Ladakh</option>
+          <option value="Madhya Pradesh">Madhya Pradesh</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Odisha">Odisha</option>
+          <option value="Punjab">Punjab</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Tripura">Tripura</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Uttarakhand">Uttarakhand</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+          <option value="Chandigarh">Chandigarh</option>
+          <option value="Dadra & Nagar Haveli">Dadra & Nagar Haveli</option>
+          <option value="Daman & Diu">Daman & Diu</option>
+          <option value="Lakshadweep">Lakshadweep</option>
+          <option value="Puducherry">Puducherry</option>
+        </select>
+      </div>
+
+      <button class="btn-save" id="btn-save" onclick="saveProfile()">Save Profile</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo" style="margin-bottom:12px"><img src="logo.jpg" class="es-logo-img" alt="EarthNsol"><span class="logo-name">EarthNsol</span><span class="logo-tagline">Healing Soil, Nourishing Life</span></div><p>Premium natural farming products.</p></div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="shop.html">Shop</a></li><li><a href="about.html">About Us</a></li><li><a href="contact.html">Contact</a></li><li><a href="privacy-policy.html">Privacy Policy</a></li><li><a href="refund-policy.html">Refund Policy</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><div class="footer-contact-item"><span>📞</span><span>+91 9067555693</span></div></div>
+      <div class="footer-col"><h4>Address</h4><div class="footer-contact-item"><span>📍</span><span>Maharashtra, India</span></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 EarthNsol. All rights reserved.</p></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="supabaseClient.js"></script>
+<script>
+async function init() {
+  const user = await window.getSession();
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  const name = user.user_metadata?.full_name || user.email.split('@')[0];
+  document.getElementById('welcome-text').textContent = 'Welcome, ' + name;
+  await updateCartBadge();
+
+  document.getElementById('prof-name').value = name;
+  document.getElementById('prof-email').value = user.email;
+
+  loadProfileData();
+}
+
+const INDIAN_STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Delhi", "Goa", "Gujarat",
+  "Haryana", "Himachal Pradesh", "Jammu & Kashmir", "Jharkhand", "Karnataka", "Kerala", "Ladakh",
+  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab",
+  "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "Andaman & Nicobar", "Chandigarh", "Dadra & Nagar Haveli", "Daman & Diu", "Lakshadweep", "Puducherry"
+];
+
+function parseAddressString(address) {
+  if (!address) return null;
+  const pinMatch = address.match(/\b\d{6}\b/);
+  const pinCode = pinMatch ? pinMatch[0] : '';
+  let state = '';
+  for (const st of INDIAN_STATES) {
+    const regex = new RegExp('\\b' + st.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'i');
+    if (regex.test(address)) {
+      state = st;
+      break;
+    }
+  }
+  let clean = address;
+  if (pinCode) clean = clean.replace(pinCode, '');
+  if (state) {
+    const stateRegex = new RegExp('\\b' + state.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + '\\b', 'gi');
+    clean = clean.replace(stateRegex, '');
+  }
+  clean = clean.replace(/^[,\s-]+|[,\s-]+$/g, '').trim();
+  const parts = clean.split(',').map(s => s.trim()).filter(Boolean);
+  let city = '';
+  let street = '';
+  if (parts.length > 0) {
+    city = parts[parts.length - 1];
+    street = parts.slice(0, parts.length - 1).join(', ');
+  }
+  return {
+    street: street || clean,
+    city: city || clean,
+    state,
+    pinCode
+  };
+}
+
+async function loadProfileData() {
+  try {
+    const res = await window.apiFetch('/api/user/profile');
+    if (res && res.data) {
+      document.getElementById('prof-phone').value = res.data.phone || '';
+      const addr = res.data.address || '';
+      const parsed = parseAddressString(addr);
+      if (parsed) {
+        document.getElementById('prof-street').value = parsed.street || '';
+        document.getElementById('prof-city').value = parsed.city || '';
+        document.getElementById('prof-pin').value = parsed.pinCode || '';
+        document.getElementById('prof-state').value = parsed.state || '';
+      } else {
+        document.getElementById('prof-street').value = addr;
+      }
+    }
+  } catch (e) {
+    console.error("No profile found or error loading.");
+  }
+}
+
+async function saveProfile() {
+  const msg = document.getElementById('p-msg');
+  const btn = document.getElementById('btn-save');
+  msg.className = 'p-msg'; 
+
+  const phone = document.getElementById('prof-phone').value.trim();
+  const street = document.getElementById('prof-street').value.trim();
+  const city = document.getElementById('prof-city').value.trim();
+  const pinCode = document.getElementById('prof-pin').value.trim();
+  const state = document.getElementById('prof-state').value;
+
+  if (!phone || !street || !city || !pinCode || !state) {
+    msg.textContent = 'Please fill in all delivery details: Phone, Street, City, State, and PIN Code.';
+    msg.className = 'p-msg err';
+    return;
+  }
+
+  if (pinCode.length !== 6) {
+    msg.textContent = 'PIN Code must be a 6-digit number.';
+    msg.className = 'p-msg err';
+    return;
+  }
+
+  const address = `${street}, ${city}, ${state} - ${pinCode}`;
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  try {
+    await window.apiFetch('/api/user/profile', {
+      method: 'PUT',
+      body: JSON.stringify({ phone, address })
+    });
+    
+    msg.textContent = '✅ Profile updated successfully! This data will auto-fill at checkout.';
+    msg.className = 'p-msg ok';
+  } catch (err) {
+    console.error("RAW ERROR MSG:", err.message);
+    msg.textContent = 'RAW ERROR: ' + err.message;
+    msg.className = 'p-msg err';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save Profile';
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function() { init(); });
+</script>
+<script src="components.js"></script>
+<script src="ai-chat.js"></script>
+</body>
+</html>
